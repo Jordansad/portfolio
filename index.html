@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ezekiel Amour T. Soglo — Cybersécurité & Développement</title>
+<meta name="description" content="Portfolio d'Ezekiel Amour T. Soglo, étudiant en Licence de Sécurité Informatique à Cotonou, Bénin. Certifié Cisco, compétences en cybersécurité, réseaux et développement web.">
+<meta name="keywords" content="cybersécurité, sécurité informatique, Kali Linux, Cisco, réseau, développeur, Cotonou, Bénin, Ezekiel Soglo">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Ezekiel Amour T. Soglo">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ezekiel Amour T. Soglo — Cybersécurité & Développement">
+<meta property="og:description" content="Étudiant en Licence de Sécurité Informatique, certifié Cisco Networking Academy. Cybersécurité, réseaux, développement web.">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ezekiel Amour T. Soglo — Cybersécurité & Développement">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #060B18;
+  --bg2:     #0D1525;
+  --card:    #0F1C30;
+  --card2:   #162035;
+  --border:  #1E2F47;
+  --cyan:    #00D4FF;
+  --cyan-d:  #0099BB;
+  --green:   #00FF9D;
+  --purple:  #7C3AED;
+  --amber:   #F59E0B;
+  --red:     #EF4444;
+  --text:    #E2E8F0;
+  --muted:   #64748B;
+  --white:   #F8FAFC;
+  --r:       10px;
+  --tr:      .25s cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;font-family:inherit}
+section{padding:90px 0}
+
+/* ── Background grid ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;
+}
+
+/* ── Container ── */
+.container{max-width:1100px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(6,11,24,.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 40px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--cyan)}
+.nav-logo span{color:var(--white)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:.83rem;font-weight:500;color:var(--muted);transition:color var(--tr)}
+.nav-links a:hover{color:var(--cyan)}
+.nav-cta{
+  padding:8px 18px;border-radius:var(--r);border:1.5px solid var(--cyan);
+  color:var(--cyan);font-size:.8rem;font-weight:700;font-family:'JetBrains Mono',monospace;
+  transition:all var(--tr);
+}
+.nav-cta:hover{background:var(--cyan);color:var(--bg)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all var(--tr)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding-top:64px;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;top:-20%;right:-10%;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,212,255,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);
+  border-radius:99px;padding:6px 14px;
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--cyan);
+  margin-bottom:22px;
+}
+.hero-tag::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero h1{
+  font-family:'Poppins',sans-serif;font-size:clamp(2.2rem,5vw,3.2rem);
+  font-weight:800;color:var(--white);line-height:1.1;margin-bottom:18px;
+}
+.hero h1 .accent{
+  background:linear-gradient(135deg,var(--cyan),var(--green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-typing{
+  font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--cyan);
+  margin-bottom:22px;min-height:26px;
+}
+.hero-typing .cursor{animation:blink2 .8s step-end infinite}
+@keyframes blink2{0%,100%{opacity:1}50%{opacity:0}}
+.hero-desc{font-size:.92rem;color:var(--muted);line-height:1.8;max-width:520px;margin-bottom:32px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{
+  padding:12px 26px;border-radius:var(--r);
+  background:linear-gradient(135deg,var(--cyan),var(--cyan-d));
+  color:var(--bg);font-weight:700;font-size:.88rem;
+  transition:all var(--tr);display:inline-flex;align-items:center;gap:8px;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,.3)}
+.btn-outline{
+  padding:12px 26px;border-radius:var(--r);
+  border:1.5px solid var(--border);color:var(--text);
+  font-weight:600;font-size:.88rem;transition:all var(--tr);
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-outline:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* Shield graphic */
+.hero-graphic{position:relative;display:flex;align-items:center;justify-content:center}
+.shield-wrap{position:relative;width:320px;height:360px}
+.shield-bg{
+  width:100%;height:100%;
+  background:linear-gradient(145deg,rgba(0,212,255,.05),rgba(0,255,157,.03));
+  border:1px solid rgba(0,212,255,.15);border-radius:50% 50% 50% 50% / 40% 40% 60% 60%;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.shield-bg::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,212,255,.04) 0%,transparent 100%);
+}
+.shield-initials{
+  font-family:'JetBrains Mono',monospace;font-size:4.5rem;font-weight:700;
+  background:linear-gradient(135deg,var(--cyan),var(--green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;z-index:1;
+}
+.shield-ring{
+  position:absolute;border:1px solid rgba(0,212,255,.12);border-radius:50%;
+  animation:rotate 20s linear infinite;
+}
+.shield-ring:nth-child(1){width:380px;height:380px;top:-30px;left:-30px}
+.shield-ring:nth-child(2){width:440px;height:440px;top:-60px;left:-60px;animation-duration:30s;animation-direction:reverse}
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.shield-dot{
+  position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 12px var(--cyan);top:20px;right:40px;animation:blink 2s ease-in-out infinite;
+}
+.hero-stats{display:flex;gap:28px;margin-top:36px}
+.hero-stat .num{font-family:'Poppins',sans-serif;font-size:1.6rem;font-weight:800;color:var(--cyan)}
+.hero-stat .lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+/* ── SECTION HEADERS ── */
+.section-header{text-align:center;margin-bottom:56px}
+.section-tag{
+  display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.73rem;
+  color:var(--cyan);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);
+  padding:4px 14px;border-radius:99px;margin-bottom:14px;text-transform:uppercase;letter-spacing:.1em;
+}
+.section-title{font-family:'Poppins',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:var(--white);margin-bottom:10px}
+.section-sub{font-size:.88rem;color:var(--muted);max-width:500px;margin:0 auto}
+
+/* ── ABOUT ── */
+#about{background:var(--bg2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.about-text p{font-size:.92rem;color:var(--muted);line-height:1.9;margin-bottom:16px}
+.about-text p strong{color:var(--text)}
+.about-contacts{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+.contact-item{display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted)}
+.contact-item svg{color:var(--cyan);flex-shrink:0}
+.contact-item a{color:var(--muted);transition:color var(--tr)}
+.contact-item a:hover{color:var(--cyan)}
+.soft-skills{display:flex;flex-direction:column;gap:10px}
+.soft-skill{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:13px 16px;
+  font-size:.85rem;color:var(--text);
+  transition:border-color var(--tr);
+}
+.soft-skill:hover{border-color:rgba(0,212,255,.3)}
+.soft-skill-icon{
+  width:36px;height:36px;border-radius:8px;
+  background:rgba(0,212,255,.1);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.soft-skill-icon svg{color:var(--cyan)}
+
+/* ── SKILLS ── */
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.skill-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:24px;
+  transition:border-color var(--tr),transform var(--tr);
+}
+.skill-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-3px)}
+.skill-card-icon{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+}
+.skill-card-title{font-family:'Poppins',sans-serif;font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:14px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:7px}
+.skill-tag{
+  padding:4px 10px;border-radius:99px;font-size:.72rem;font-weight:600;
+  font-family:'JetBrains Mono',monospace;
+}
+.tag-cyan{background:rgba(0,212,255,.1);color:var(--cyan);border:1px solid rgba(0,212,255,.2)}
+.tag-green{background:rgba(0,255,157,.08);color:var(--green);border:1px solid rgba(0,255,157,.2)}
+.tag-purple{background:rgba(124,58,237,.1);color:#A78BFA;border:1px solid rgba(124,58,237,.2)}
+.tag-amber{background:rgba(245,158,11,.08);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+
+/* ── FORMATION ── */
+#formation{background:var(--bg2)}
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--cyan),transparent)}
+.tl-item{position:relative;margin-bottom:40px}
+.tl-dot{
+  position:absolute;left:-27px;top:4px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--cyan);
+  box-shadow:0 0 12px rgba(0,212,255,.4);
+}
+.tl-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:20px 22px;
+  transition:border-color var(--tr);
+}
+.tl-card:hover{border-color:rgba(0,212,255,.3)}
+.tl-date{
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;
+  color:var(--cyan);margin-bottom:6px;
+}
+.tl-title{font-family:'Poppins',sans-serif;font-size:.95rem;font-weight:700;color:var(--white);margin-bottom:3px}
+.tl-sub{font-size:.83rem;color:var(--muted)}
+.tl-badge{
+  display:inline-block;margin-top:8px;padding:3px 10px;
+  background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);
+  border-radius:99px;font-size:.7rem;color:var(--cyan);
+  font-family:'JetBrains Mono',monospace;
+}
+
+/* ── CERTIFICATIONS ── */
+.certs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.cert-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:22px;display:flex;gap:16px;align-items:flex-start;
+  transition:border-color var(--tr),transform var(--tr);
+}
+.cert-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-3px)}
+.cert-icon{
+  width:48px;height:48px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,255,157,.08));
+  border:1px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;
+}
+.cert-icon svg{color:var(--cyan)}
+.cert-name{font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:4px}
+.cert-issuer{font-size:.75rem;color:var(--muted)}
+.cert-badge{
+  display:inline-block;margin-top:8px;padding:2px 9px;
+  background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.2);
+  border-radius:99px;font-size:.68rem;color:var(--green);
+  font-family:'JetBrains Mono',monospace;font-weight:700;
+}
+
+/* ── PROJETS ── */
+#projets{background:var(--bg2)}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.proj-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:24px;display:flex;flex-direction:column;
+  transition:border-color var(--tr),transform var(--tr);position:relative;overflow:hidden;
+}
+.proj-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--green));
+  opacity:0;transition:opacity var(--tr);
+}
+.proj-card:hover{border-color:rgba(0,212,255,.3);transform:translateY(-4px)}
+.proj-card:hover::before{opacity:1}
+.proj-type{
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;
+  display:flex;align-items:center;gap:6px;
+}
+.proj-type-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan)}
+.proj-title{font-family:'Poppins',sans-serif;font-size:.92rem;font-weight:700;color:var(--white);margin-bottom:10px}
+.proj-desc{font-size:.8rem;color:var(--muted);line-height:1.7;flex:1;margin-bottom:14px}
+.proj-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.proj-tag{
+  padding:3px 9px;border-radius:99px;font-size:.68rem;font-weight:600;
+  font-family:'JetBrains Mono',monospace;
+}
+.proj-links{display:flex;gap:10px;margin-top:auto}
+.proj-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.75rem;font-weight:600;color:var(--cyan);
+  transition:color var(--tr);
+}
+.proj-link:hover{color:var(--green)}
+
+/* ── LANGUES ── */
+.langs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:600px;margin:0 auto}
+.lang-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:24px;text-align:center;
+  transition:border-color var(--tr);
+}
+.lang-card:hover{border-color:rgba(0,212,255,.3)}
+.lang-flag{font-size:2rem;margin-bottom:10px}
+.lang-name{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:700;color:var(--white);margin-bottom:4px}
+.lang-level{font-size:.8rem;color:var(--cyan);font-family:'JetBrains Mono',monospace}
+.lang-bar{background:var(--border);border-radius:99px;height:4px;margin-top:12px;overflow:hidden}
+.lang-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width 1.2s ease}
+
+/* ── CONTACT ── */
+.contact-wrapper{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
+  max-width:900px;margin:0 auto;
+}
+.contact-info{display:flex;flex-direction:column;gap:20px}
+.contact-card{
+  display:flex;align-items:center;gap:16px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
+  transition:border-color var(--tr),transform var(--tr);
+}
+.contact-card:hover{border-color:rgba(0,212,255,.3);transform:translateX(4px)}
+.contact-card-icon{
+  width:44px;height:44px;border-radius:10px;flex-shrink:0;
+  background:rgba(0,212,255,.1);display:flex;align-items:center;justify-content:center;
+}
+.contact-card-icon svg{color:var(--cyan)}
+.contact-card-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+.contact-card-val{font-size:.88rem;color:var(--white);font-weight:600}
+.contact-card-val a{color:var(--white);transition:color var(--tr)}
+.contact-card-val a:hover{color:var(--cyan)}
+.contact-cta{text-align:center;padding:40px;background:var(--card);border:1px solid var(--border);border-radius:20px}
+.contact-cta h3{font-family:'Poppins',sans-serif;font-size:1.3rem;font-weight:800;color:var(--white);margin-bottom:10px}
+.contact-cta p{font-size:.85rem;color:var(--muted);margin-bottom:24px;line-height:1.6}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:28px 40px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--muted);
+}
+footer span{color:var(--cyan)}
+
+/* ── ANIMATIONS ── */
+.fade-in{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ── SCROLL TOP ── */
+#scrollTop{
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--cyan-d));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,212,255,.3);
+  opacity:0;pointer-events:none;transition:all var(--tr);cursor:pointer;
+}
+#scrollTop.show{opacity:1;pointer-events:all}
+#scrollTop svg{color:var(--bg)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links{display:none;position:fixed;top:64px;left:0;right:0;background:var(--bg2);flex-direction:column;padding:20px;border-bottom:1px solid var(--border);gap:16px}
+  .nav-links.open{display:flex}
+  .hamburger{display:flex}
+  .hero-inner{grid-template-columns:1fr;gap:40px}
+  .hero-graphic{display:none}
+  .about-grid{grid-template-columns:1fr}
+  .skills-grid{grid-template-columns:1fr 1fr}
+  .projects-grid{grid-template-columns:1fr 1fr}
+  .contact-wrapper{grid-template-columns:1fr}
+  .certs-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .skills-grid{grid-template-columns:1fr}
+  .projects-grid{grid-template-columns:1fr}
+  .hero-stats{gap:18px}
+  .langs-grid{grid-template-columns:1fr}
+  section{padding:60px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-logo">&lt;<span>EAS</span> /&gt;</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#about">À propos</a>
+    <a href="#skills">Compétences</a>
+    <a href="#formation">Formation</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#projets">Projets</a>
+    <a href="#contact">Contact</a>
+    <a href="https://adépastryformation.my.canva.site/cv-pdf" target="_blank" class="nav-cta">CV PDF</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-tag">
+          Disponible pour un stage
+        </div>
+        <h1>Ezekiel Amour<br>T. <span class="accent">Soglo</span></h1>
+        <div class="hero-typing" id="typingText"><span id="typed"></span><span class="cursor">|</span></div>
+        <p class="hero-desc">
+          Étudiant en <strong>Licence de Sécurité Informatique</strong> à Cotonou, Bénin. Certifié Cisco Networking Academy, passionné par la protection des systèmes et la cyberdéfense. Rigoureux, autonome, orienté solutions.
+        </p>
+        <div class="hero-btns">
+          <a href="#projets" class="btn-primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Voir mes projets
+          </a>
+          <a href="#contact" class="btn-outline">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Me contacter
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="num">4+</div>
+            <div class="lbl">Certifications<br>Cisco</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">6+</div>
+            <div class="lbl">Projets<br>réalisés</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">3</div>
+            <div class="lbl">Ans de<br>formation</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-graphic">
+        <div class="shield-wrap">
+          <div class="shield-ring"></div>
+          <div class="shield-ring"></div>
+          <div class="shield-bg">
+            <div class="shield-dot"></div>
+            <div class="shield-initials">EAS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="about">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">// about me</div>
+      <h2 class="section-title">Qui suis-je ?</h2>
+      <p class="section-sub">Passionné par la cybersécurité et la protection des systèmes d'information</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-text fade-in">
+        <p>Je suis <strong>Ezekiel Amour T. Soglo</strong>, étudiant en 3ème année de Licence en Sécurité Informatique à la <strong>HECM (Haute Ecole du Commerce et du Management)</strong> de Cotonou, Bénin.</p>
+        <p>Certifié <strong>Cisco Networking Academy</strong> en cybersécurité, réseaux et intelligence artificielle, je maîtrise des outils comme <strong>Kali Linux</strong>, <strong>Cisco Packet Tracer</strong> et possède de solides bases en développement web (Node.js, React, PHP).</p>
+        <p>Je recherche activement un <strong>stage en cybersécurité</strong> pour développer une expérience pratique en environnement professionnel et contribuer à la sécurité des systèmes d'information.</p>
+        <div class="about-contacts">
+          <div class="contact-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Cotonou, Bénin
+          </div>
+          <div class="contact-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <a href="tel:+22960398024">+229 60 39 80 24</a>
+          </div>
+          <div class="contact-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:sogloamour76@gmail.com">sogloamour76@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <a href="https://github.com/jordansad" target="_blank">github.com/jordansad</a>
+          </div>
+        </div>
+      </div>
+      <div class="soft-skills fade-in">
+        <div class="soft-skill">
+          <div class="soft-skill-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          Esprit analytique & sens du détail
+        </div>
+        <div class="soft-skill">
+          <div class="soft-skill-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          Respect de la confidentialité
+        </div>
+        <div class="soft-skill">
+          <div class="soft-skill-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          Apprentissage rapide & autonomie
+        </div>
+        <div class="soft-skill">
+          <div class="soft-skill-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          Travail en équipe & collaboration
+        </div>
+        <div class="soft-skill">
+          <div class="soft-skill-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          Rigueur & sens des responsabilités
+        </div>
+        <div class="soft-skill">
+          <div class="soft-skill-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          Résolution de problèmes
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SKILLS ══ -->
+<section id="skills">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">// skills</div>
+      <h2 class="section-title">Compétences techniques</h2>
+      <p class="section-sub">Cybersécurité, réseaux, développement et systèmes</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon" style="background:rgba(0,212,255,.1)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="skill-card-title">Cybersécurité</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-cyan">Principes CIA</span>
+          <span class="skill-tag tag-cyan">Analyse des menaces</span>
+          <span class="skill-tag tag-cyan">Firewall</span>
+          <span class="skill-tag tag-cyan">IDS / IPS</span>
+          <span class="skill-tag tag-cyan">Gestion vulnérabilités</span>
+          <span class="skill-tag tag-cyan">Authentification</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon" style="background:rgba(0,255,157,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        </div>
+        <div class="skill-card-title">Réseaux</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-green">TCP/IP</span>
+          <span class="skill-tag tag-green">DNS</span>
+          <span class="skill-tag tag-green">DHCP</span>
+          <span class="skill-tag tag-green">Modèle OSI</span>
+          <span class="skill-tag tag-green">Cisco Packet Tracer</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon" style="background:rgba(124,58,237,.1)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="skill-card-title">Systèmes & Outils</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-purple">Kali Linux</span>
+          <span class="skill-tag tag-purple">Linux</span>
+          <span class="skill-tag tag-purple">Windows</span>
+          <span class="skill-tag tag-purple">Cisco Packet Tracer</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon" style="background:rgba(245,158,11,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="skill-card-title">Langages & Dev</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-amber">JavaScript</span>
+          <span class="skill-tag tag-amber">Node.js</span>
+          <span class="skill-tag tag-amber">React.js</span>
+          <span class="skill-tag tag-amber">PHP</span>
+          <span class="skill-tag tag-amber">C++</span>
+          <span class="skill-tag tag-amber">SQL</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon" style="background:rgba(0,212,255,.1)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="skill-card-title">Bases de données</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-cyan">PostgreSQL</span>
+          <span class="skill-tag tag-cyan">SQLite</span>
+          <span class="skill-tag tag-cyan">SQL sécurisé</span>
+          <span class="skill-tag tag-cyan">Architecture client/serveur</span>
+        </div>
+      </div>
+      <div class="skill-card fade-in">
+        <div class="skill-card-icon" style="background:rgba(0,255,157,.08)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div class="skill-card-title">Développement Web</div>
+        <div class="skill-tags">
+          <span class="skill-tag tag-green">HTML / CSS</span>
+          <span class="skill-tag tag-green">Node.js / Express</span>
+          <span class="skill-tag tag-green">React.js</span>
+          <span class="skill-tag tag-green">API REST</span>
+          <span class="skill-tag tag-green">JWT / Auth</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FORMATION ══ -->
+<section id="formation">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">// education</div>
+      <h2 class="section-title">Formation</h2>
+      <p class="section-sub">Mon parcours académique et professionnel</p>
+    </div>
+    <div class="timeline" style="max-width:700px;margin:0 auto">
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-date">2023 — 2026 (en cours)</div>
+          <div class="tl-title">Licence en Sécurité Informatique</div>
+          <div class="tl-sub">Haute Ecole du Commerce et du Management (HECM) — Cotonou, Bénin</div>
+          <span class="tl-badge">En cours</span>
+        </div>
+      </div>
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-date">2021 — 2023</div>
+          <div class="tl-title">Formation professionnelle en Informatique</div>
+          <div class="tl-sub">TAHA ENTERPRISES (Dr. Computer) — Cotonou, Bénin</div>
+          <span class="tl-badge">Obtenu</span>
+        </div>
+      </div>
+      <div class="tl-item fade-in">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-date">2020 — 2021</div>
+          <div class="tl-title">Baccalauréat</div>
+          <div class="tl-sub">CS Sainte Thérèse d'Avila — Natitingou, Bénin</div>
+          <span class="tl-badge">Obtenu</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CERTIFICATIONS ══ -->
+<section id="certifications">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">// certifications</div>
+      <h2 class="section-title">Certifications</h2>
+      <p class="section-sub">Certifié Cisco Networking Academy</p>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card fade-in">
+        <div class="cert-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">Introduction to Cybersecurity</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <span class="cert-badge">✓ Certifié</span>
+        </div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">Cybersecurity Course Completion</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <span class="cert-badge">✓ Certifié</span>
+        </div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">Getting Started with Cisco Packet Tracer</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <span class="cert-badge">✓ Certifié</span>
+        </div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">Introduction to Modern AI</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+          <span class="cert-badge">✓ Certifié</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROJETS ══ -->
+<section id="projets">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">// projects</div>
+      <h2 class="section-title">Mes projets</h2>
+      <p class="section-sub">Cybersécurité, développement web et applications</p>
+    </div>
+    <div class="projects-grid">
+      <div class="proj-card fade-in">
+        <div class="proj-type"><div class="proj-type-dot"></div>Cybersécurité</div>
+        <div class="proj-title">Sécurisation d'un réseau simulé</div>
+        <div class="proj-desc">Conception d'un réseau sous Cisco Packet Tracer, identification des vulnérabilités et mise en place de règles de sécurité basiques pour protéger l'infrastructure.</div>
+        <div class="proj-tags">
+          <span class="skill-tag tag-cyan">Cisco Packet Tracer</span>
+          <span class="skill-tag tag-green">Firewall</span>
+          <span class="skill-tag tag-cyan">TCP/IP</span>
+        </div>
+      </div>
+      <div class="proj-card fade-in">
+        <div class="proj-type"><div class="proj-type-dot"></div>Cybersécurité</div>
+        <div class="proj-title">Analyse de vulnérabilités sous Linux</div>
+        <div class="proj-desc">Étude des configurations système, identification des failles potentielles et application de mesures de protection sur un système Linux.</div>
+        <div class="proj-tags">
+          <span class="skill-tag tag-purple">Kali Linux</span>
+          <span class="skill-tag tag-cyan">Audit sécurité</span>
+          <span class="skill-tag tag-green">Hardening</span>
+        </div>
+      </div>
+      <div class="proj-card fade-in">
+        <div class="proj-type"><div class="proj-type-dot"></div>Développement Web</div>
+        <div class="proj-title">Nationalfinance — Banque en ligne</div>
+        <div class="proj-desc">Plateforme bancaire complète avec espace client, dashboard admin, virements sécurisés avec validation par code, gestion des transactions en temps réel.</div>
+        <div class="proj-tags">
+          <span class="skill-tag tag-amber">Node.js</span>
+          <span class="skill-tag tag-amber">Express</span>
+          <span class="skill-tag tag-amber">SQLite</span>
+          <span class="skill-tag tag-cyan">JWT Auth</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://nationalfinance.onrender.com" target="_blank" class="proj-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Voir le site
+          </a>
+          <a href="https://github.com/Jordansad/banque-en-ligne" target="_blank" class="proj-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+      <div class="proj-card fade-in">
+        <div class="proj-type"><div class="proj-type-dot"></div>Développement Web</div>
+        <div class="proj-title">VériCode — Vérification & Remboursement</div>
+        <div class="proj-desc">Plateforme sécurisée de vérification de codes et gestion de remboursements en ligne avec interface utilisateur moderne.</div>
+        <div class="proj-tags">
+          <span class="skill-tag tag-amber">JavaScript</span>
+          <span class="skill-tag tag-amber">Node.js</span>
+          <span class="skill-tag tag-green">TailwindCSS</span>
+        </div>
+        <div class="proj-links">
+          <a href="https://verification-site-xj7p.onrender.com" target="_blank" class="proj-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Voir le site
+          </a>
+          <a href="https://github.com/Jordansad/verification-site" target="_blank" class="proj-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+      <div class="proj-card fade-in">
+        <div class="proj-type"><div class="proj-type-dot"></div>Développement Web</div>
+        <div class="proj-title">Application Web de Gestion</div>
+        <div class="proj-desc">Application complète avec architecture client/serveur, backend Node.js, interfaces dynamiques React.js, base de données PostgreSQL et requêtes SQL sécurisées.</div>
+        <div class="proj-tags">
+          <span class="skill-tag tag-amber">Node.js</span>
+          <span class="skill-tag tag-amber">React.js</span>
+          <span class="skill-tag tag-cyan">PostgreSQL</span>
+          <span class="skill-tag tag-green">REST API</span>
+        </div>
+      </div>
+      <div class="proj-card fade-in">
+        <div class="proj-type"><div class="proj-type-dot"></div>Développement</div>
+        <div class="proj-title">Système de Gestion en C++</div>
+        <div class="proj-desc">Application console en C++ avec implémentation de structures de données avancées, gestion des entrées utilisateurs et validation robuste des données.</div>
+        <div class="proj-tags">
+          <span class="skill-tag tag-purple">C++</span>
+          <span class="skill-tag tag-purple">Structures de données</span>
+          <span class="skill-tag tag-purple">Algorithmique</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LANGUES ══ -->
+<section id="langues">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">// languages</div>
+      <h2 class="section-title">Langues</h2>
+    </div>
+    <div class="langs-grid">
+      <div class="lang-card fade-in">
+        <div class="lang-flag">🇫🇷</div>
+        <div class="lang-name">Français</div>
+        <div class="lang-level">Courant — Langue maternelle</div>
+        <div class="lang-bar"><div class="lang-fill" data-width="95%" style="width:0%"></div></div>
+      </div>
+      <div class="lang-card fade-in">
+        <div class="lang-flag">🇬🇧</div>
+        <div class="lang-name">Anglais</div>
+        <div class="lang-level">Intermédiaire — Lecture technique IT</div>
+        <div class="lang-bar"><div class="lang-fill" data-width="55%" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-tag">// contact</div>
+      <h2 class="section-title">Me contacter</h2>
+      <p class="section-sub">Disponible pour un stage en cybersécurité</p>
+    </div>
+    <div class="contact-wrapper">
+      <div class="contact-info fade-in">
+        <div class="contact-card">
+          <div class="contact-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div class="contact-card-label">Email</div>
+            <div class="contact-card-val"><a href="mailto:sogloamour76@gmail.com">sogloamour76@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div>
+            <div class="contact-card-label">Téléphone</div>
+            <div class="contact-card-val"><a href="tel:+22960398024">+229 60 39 80 24</a></div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </div>
+          <div>
+            <div class="contact-card-label">GitHub</div>
+            <div class="contact-card-val"><a href="https://github.com/jordansad" target="_blank">github.com/jordansad</a></div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="contact-card-label">Localisation</div>
+            <div class="contact-card-val">Cotonou, Bénin</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-cta fade-in">
+        <div style="font-size:2.5rem;margin-bottom:16px">🤝</div>
+        <h3>Travaillons ensemble</h3>
+        <p>Je suis à la recherche d'un <strong style="color:var(--cyan)">stage en cybersécurité</strong> pour mettre en pratique mes compétences en environnement professionnel.</p>
+        <a href="mailto:sogloamour76@gmail.com" class="btn-primary" style="display:inline-flex;justify-content:center;width:100%">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Envoyer un email
+        </a>
+        <div style="margin-top:14px">
+          <a href="https://adépastryformation.my.canva.site/cv-pdf" target="_blank" class="btn-outline" style="display:inline-flex;justify-content:center;width:100%">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Télécharger mon CV
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  &lt; Ezekiel Amour T. Soglo — <span>Cybersécurité & Développement</span> — Cotonou, Bénin /&gt;
+</footer>
+
+<!-- Scroll top -->
+<div id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+</div>
+
+<script>
+/* ── Typing animation ── */
+const phrases = [
+  'Étudiant en Cybersécurité',
+  'Certifié Cisco Networking Academy',
+  'Développeur Web Full Stack',
+  'Passionné par la protection des systèmes',
+];
+let pi = 0, ci = 0, del = false;
+const el = document.getElementById('typed');
+function type() {
+  const cur = phrases[pi];
+  if (!del) {
+    el.textContent = cur.slice(0, ++ci);
+    if (ci === cur.length) { del = true; setTimeout(type, 1800); return; }
+  } else {
+    el.textContent = cur.slice(0, --ci);
+    if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; }
+  }
+  setTimeout(type, del ? 40 : 70);
+}
+type();
+
+/* ── Scroll animations ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+/* ── Language bars ── */
+const langObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.lang-fill').forEach(bar => {
+        bar.style.width = bar.dataset.width;
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.lang-card').forEach(c => langObserver.observe(c));
+
+/* ── Scroll top button ── */
+const scrollBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('show', window.scrollY > 400);
+});
+
+/* ── Mobile nav ── */
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+document.querySelectorAll('#navLinks a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+/* ── Active nav link ── */
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  const pos = window.scrollY + 100;
+  sections.forEach(s => {
+    const link = document.querySelector(`.nav-links a[href="#${s.id}"]`);
+    if (link) link.style.color = (pos >= s.offsetTop && pos < s.offsetTop + s.offsetHeight) ? 'var(--cyan)' : '';
+  });
+});
+</script>
+</body>
+</html>
