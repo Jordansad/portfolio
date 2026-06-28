@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ezekiel Amour T. Soglo — Cybersécurité & Développement</title>
-<meta name="description" content="Portfolio d'Ezekiel Amour T. Soglo, étudiant en Licence de Sécurité Informatique à Cotonou, Bénin. Certifié Cisco, compétences en cybersécurité, réseaux et développement web.">
+<meta name="description" content="Portfolio d'Ezekiel Amour T. Soglo, titulaire d'une Licence en Sécurité Informatique à Cotonou, Bénin. Certifié Cisco, compétences en cybersécurité, réseaux et développement web.">
 <meta name="keywords" content="cybersécurité, sécurité informatique, Kali Linux, Cisco, réseau, développeur, Cotonou, Bénin, Ezekiel Soglo">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Ezekiel Amour T. Soglo">
@@ -127,36 +127,36 @@ nav{
 }
 .btn-outline:hover{border-color:var(--cyan);color:var(--cyan)}
 
-/* Shield graphic */
+/* Photo hero */
 .hero-graphic{position:relative;display:flex;align-items:center;justify-content:center}
-.shield-wrap{position:relative;width:320px;height:360px}
-.shield-bg{
-  width:100%;height:100%;
-  background:linear-gradient(145deg,rgba(0,212,255,.05),rgba(0,255,157,.03));
-  border:1px solid rgba(0,212,255,.15);border-radius:50% 50% 50% 50% / 40% 40% 60% 60%;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-}
-.shield-bg::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(0,212,255,.04) 0%,transparent 100%);
-}
-.shield-initials{
-  font-family:'JetBrains Mono',monospace;font-size:4.5rem;font-weight:700;
-  background:linear-gradient(135deg,var(--cyan),var(--green));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  position:relative;z-index:1;
-}
-.shield-ring{
-  position:absolute;border:1px solid rgba(0,212,255,.12);border-radius:50%;
+.photo-wrap{position:relative;width:300px;height:300px}
+.photo-ring{
+  position:absolute;border:1px solid rgba(0,212,255,.18);border-radius:50%;
   animation:rotate 20s linear infinite;
 }
-.shield-ring:nth-child(1){width:380px;height:380px;top:-30px;left:-30px}
-.shield-ring:nth-child(2){width:440px;height:440px;top:-60px;left:-60px;animation-duration:30s;animation-direction:reverse}
+.photo-ring:nth-child(1){width:360px;height:360px;top:-30px;left:-30px}
+.photo-ring:nth-child(2){width:420px;height:420px;top:-60px;left:-60px;animation-duration:30s;animation-direction:reverse}
 @keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.shield-dot{
-  position:absolute;width:8px;height:8px;border-radius:50%;background:var(--cyan);
-  box-shadow:0 0 12px var(--cyan);top:20px;right:40px;animation:blink 2s ease-in-out infinite;
+.photo-circle{
+  width:300px;height:300px;border-radius:50%;overflow:hidden;position:relative;z-index:1;
+  border:3px solid transparent;
+  background:linear-gradient(var(--bg),var(--bg)) padding-box,
+             linear-gradient(135deg,var(--cyan),var(--green)) border-box;
+  box-shadow:0 0 40px rgba(0,212,255,.2),0 0 80px rgba(0,212,255,.08);
+}
+.photo-circle img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.photo-dot{
+  position:absolute;width:14px;height:14px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 16px var(--green);bottom:16px;right:16px;z-index:2;
+  border:2px solid var(--bg);
+  animation:blink 2s ease-in-out infinite;
+}
+.photo-badge{
+  position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);z-index:3;
+  background:linear-gradient(135deg,var(--cyan),var(--cyan-d));
+  color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;
+  padding:5px 14px;border-radius:99px;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(0,212,255,.3);
 }
 .hero-stats{display:flex;gap:28px;margin-top:36px}
 .hero-stat .num{font-family:'Poppins',sans-serif;font-size:1.6rem;font-weight:800;color:var(--cyan)}
@@ -409,6 +409,10 @@ footer span{color:var(--cyan)}
     <a href="#certifications">Certifications</a>
     <a href="#projets">Projets</a>
     <a href="#contact">Contact</a>
+    <a href="https://www.linkedin.com/in/amour-soglo-a48a51387" target="_blank" style="display:inline-flex;align-items:center;gap:5px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
     <a href="https://adépastryformation.my.canva.site/cv-pdf" target="_blank" class="nav-cta">CV PDF</a>
   </div>
   <div class="hamburger" id="hamburger" onclick="toggleNav()">
@@ -427,7 +431,7 @@ footer span{color:var(--cyan)}
         <h1>Ezekiel Amour<br>T. <span class="accent">Soglo</span></h1>
         <div class="hero-typing" id="typingText"><span id="typed"></span><span class="cursor">|</span></div>
         <p class="hero-desc">
-          Étudiant en <strong>Licence de Sécurité Informatique</strong> à Cotonou, Bénin. Certifié Cisco Networking Academy, passionné par la protection des systèmes et la cyberdéfense. Rigoureux, autonome, orienté solutions.
+          Titulaire d'une <strong>Licence en Sécurité Informatique</strong> à Cotonou, Bénin. Certifié Cisco Networking Academy, passionné par la protection des systèmes et la cyberdéfense. Rigoureux, autonome, orienté solutions.
         </p>
         <div class="hero-btns">
           <a href="#projets" class="btn-primary">
@@ -456,13 +460,14 @@ footer span{color:var(--cyan)}
       </div>
 
       <div class="hero-graphic">
-        <div class="shield-wrap">
-          <div class="shield-ring"></div>
-          <div class="shield-ring"></div>
-          <div class="shield-bg">
-            <div class="shield-dot"></div>
-            <div class="shield-initials">EAS</div>
+        <div class="photo-wrap">
+          <div class="photo-ring"></div>
+          <div class="photo-ring"></div>
+          <div class="photo-circle">
+            <img src="photo.jpeg" alt="Ezekiel Amour T. Soglo">
           </div>
+          <div class="photo-dot"></div>
+          <div class="photo-badge">Licence · Cybersécurité</div>
         </div>
       </div>
     </div>
@@ -479,7 +484,7 @@ footer span{color:var(--cyan)}
     </div>
     <div class="about-grid">
       <div class="about-text fade-in">
-        <p>Je suis <strong>Ezekiel Amour T. Soglo</strong>, étudiant en 3ème année de Licence en Sécurité Informatique à la <strong>HECM (Haute Ecole du Commerce et du Management)</strong> de Cotonou, Bénin.</p>
+        <p>Je suis <strong>Ezekiel Amour T. Soglo</strong>, titulaire d'une <strong>Licence en Sécurité Informatique</strong> obtenue à la <strong>HECM (Haute Ecole du Commerce et du Management)</strong> de Cotonou, Bénin.</p>
         <p>Certifié <strong>Cisco Networking Academy</strong> en cybersécurité, réseaux et intelligence artificielle, je maîtrise des outils comme <strong>Kali Linux</strong>, <strong>Cisco Packet Tracer</strong> et possède de solides bases en développement web (Node.js, React, PHP).</p>
         <p>Je recherche activement un <strong>stage en cybersécurité</strong> pour développer une expérience pratique en environnement professionnel et contribuer à la sécurité des systèmes d'information.</p>
         <div class="about-contacts">
@@ -498,6 +503,10 @@ footer span{color:var(--cyan)}
           <div class="contact-item">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
             <a href="https://github.com/jordansad" target="_blank">github.com/jordansad</a>
+          </div>
+          <div class="contact-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:var(--cyan)"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            <a href="https://www.linkedin.com/in/amour-soglo-a48a51387" target="_blank">linkedin.com/in/amour-soglo</a>
           </div>
         </div>
       </div>
@@ -634,10 +643,10 @@ footer span{color:var(--cyan)}
       <div class="tl-item fade-in">
         <div class="tl-dot"></div>
         <div class="tl-card">
-          <div class="tl-date">2023 — 2026 (en cours)</div>
+          <div class="tl-date">2023 — 2026</div>
           <div class="tl-title">Licence en Sécurité Informatique</div>
           <div class="tl-sub">Haute Ecole du Commerce et du Management (HECM) — Cotonou, Bénin</div>
-          <span class="tl-badge">En cours</span>
+          <span class="tl-badge" style="background:rgba(0,255,157,.08);border-color:rgba(0,255,157,.2);color:var(--green)">Obtenu</span>
         </div>
       </div>
       <div class="tl-item fade-in">
@@ -869,6 +878,15 @@ footer span{color:var(--cyan)}
           <div>
             <div class="contact-card-label">GitHub</div>
             <div class="contact-card-val"><a href="https://github.com/jordansad" target="_blank">github.com/jordansad</a></div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--cyan)"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </div>
+          <div>
+            <div class="contact-card-label">LinkedIn</div>
+            <div class="contact-card-val"><a href="https://www.linkedin.com/in/amour-soglo-a48a51387" target="_blank">linkedin.com/in/amour-soglo</a></div>
           </div>
         </div>
         <div class="contact-card">
