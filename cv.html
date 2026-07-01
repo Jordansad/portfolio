@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV — Ezekiel Amour T. Soglo</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #03070f;
+  --bg2:    #060d1a;
+  --card:   #080f1e;
+  --border: #0f1f3d;
+  --c1:     #00f5ff;
+  --c2:     #39ff14;
+  --c3:     #bf5af2;
+  --text:   #c8d8f0;
+  --muted:  #4a6080;
+  --white:  #f0f8ff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+a { color: var(--c1); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── PRINT BUTTON ── */
+.print-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(3,7,15,.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.print-bar-logo {
+  font-family: 'Orbitron', sans-serif; font-size: .85rem;
+  color: var(--c1); letter-spacing: .1em;
+}
+.print-bar-btns { display: flex; gap: 10px; }
+.btn-print {
+  padding: 7px 20px; border-radius: 4px; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+  font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  border: 1px solid var(--c1); color: var(--c1);
+  background: rgba(0,245,255,.06);
+  transition: all .25s;
+}
+.btn-print:hover { background: var(--c1); color: var(--bg); }
+.btn-back {
+  padding: 7px 20px; border-radius: 4px; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+  font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  border: 1px solid var(--border); color: var(--muted);
+  background: transparent; transition: all .25s; text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.btn-back:hover { border-color: var(--c1); color: var(--c1); text-decoration: none; }
+
+/* ── PAGE ── */
+.page {
+  max-width: 820px; margin: 0 auto;
+  padding: 80px 40px 60px;
+}
+
+/* ── HEADER ── */
+.cv-header {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 32px; align-items: start;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  position: relative;
+}
+.cv-header::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, var(--c1), var(--c2), transparent);
+  opacity: .5;
+}
+.cv-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem; font-weight: 900;
+  color: var(--white); letter-spacing: .04em;
+  line-height: 1.1; margin-bottom: 6px;
+}
+.cv-name span {
+  background: linear-gradient(90deg, var(--c1), var(--c2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cv-title {
+  font-family: 'JetBrains Mono', monospace; font-size: .85rem;
+  color: var(--c1); letter-spacing: .08em; margin-bottom: 14px;
+}
+.cv-contacts {
+  display: flex; flex-wrap: wrap; gap: 8px 20px;
+}
+.cv-contact-item {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+  color: var(--muted);
+}
+.cv-contact-item svg { color: var(--c1); flex-shrink: 0; }
+.cv-contact-item a { color: var(--muted); }
+.cv-contact-item a:hover { color: var(--c1); text-decoration: none; }
+
+.cv-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(57,255,20,.06); border: 1px solid rgba(57,255,20,.2);
+  border-radius: 4px; padding: 8px 16px;
+  font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+  color: var(--c2); letter-spacing: .06em; white-space: nowrap;
+  align-self: flex-start;
+}
+.pulse {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--c2); box-shadow: 0 0 8px var(--c2);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.6} }
+
+/* ── SECTION ── */
+.cv-section { margin-bottom: 30px; }
+.cv-section-title {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Orbitron', sans-serif; font-size: .72rem; font-weight: 700;
+  color: var(--c1); letter-spacing: .14em; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.cv-section-title::before {
+  content: ''; width: 18px; height: 1px;
+  background: linear-gradient(90deg, var(--c1), transparent);
+}
+.cv-section-title::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+/* ── ABOUT ── */
+.cv-about {
+  font-size: .85rem; color: var(--muted); line-height: 1.85;
+  border-left: 2px solid var(--border); padding-left: 14px;
+}
+.cv-about strong { color: var(--text); }
+
+/* ── TWO-COL LAYOUT ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+/* ── COMPETENCES ── */
+.skill-group { margin-bottom: 14px; }
+.skill-group-name {
+  font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+  color: var(--c1); letter-spacing: .08em; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.stag {
+  padding: 2px 9px; border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace; font-size: .64rem;
+}
+.stag-c { background:rgba(0,245,255,.07);color:var(--c1);border:1px solid rgba(0,245,255,.15) }
+.stag-g { background:rgba(57,255,20,.06);color:var(--c2);border:1px solid rgba(57,255,20,.15) }
+.stag-p { background:rgba(191,90,242,.08);color:var(--c3);border:1px solid rgba(191,90,242,.15) }
+.stag-a { background:rgba(255,160,0,.07);color:#ffb347;border:1px solid rgba(255,160,0,.15) }
+
+/* ── FORMATION / EXPERIENCE ── */
+.tl-item { display: grid; grid-template-columns: 120px 1fr; gap: 16px; margin-bottom: 18px; }
+.tl-item:last-child { margin-bottom: 0; }
+.tl-date {
+  font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+  color: var(--c1); letter-spacing: .06em; padding-top: 2px; text-align: right;
+}
+.tl-content { border-left: 1px solid var(--border); padding-left: 16px; position: relative; }
+.tl-content::before {
+  content: ''; position: absolute; left: -5px; top: 6px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--bg); border: 2px solid var(--c1);
+  box-shadow: 0 0 10px rgba(0,245,255,.5);
+}
+.tl-title {
+  font-family: 'Inter', sans-serif; font-size: .85rem; font-weight: 700;
+  color: var(--white); margin-bottom: 2px;
+}
+.tl-sub { font-size: .78rem; color: var(--muted); margin-bottom: 4px; }
+.tl-badge {
+  display: inline-block; padding: 1px 9px; border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace; font-size: .62rem; font-weight: 700;
+  letter-spacing: .05em;
+}
+.badge-done { background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.2);color:var(--c2) }
+.badge-wip  { background:rgba(0,245,255,.08);border:1px solid rgba(0,245,255,.2);color:var(--c1) }
+
+/* ── CERTIFICATIONS ── */
+.cert-list { display: flex; flex-direction: column; gap: 10px; }
+.cert-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color .25s;
+}
+.cert-item:hover { border-color: rgba(0,245,255,.3); }
+.cert-item.anssi { border-color: rgba(191,90,242,.2); }
+.cert-item.anssi:hover { border-color: rgba(191,90,242,.5); }
+.cert-ico {
+  width: 36px; height: 36px; border-radius: 6px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.cert-ico-cisco { background:rgba(0,245,255,.08);border:1px solid rgba(0,245,255,.15); }
+.cert-ico-anssi { background:rgba(191,90,242,.1);border:1px solid rgba(191,90,242,.2); }
+.cert-name { font-size: .82rem; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+.cert-issuer { font-family: 'JetBrains Mono', monospace; font-size: .67rem; color: var(--muted); }
+.cert-link {
+  margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: .64rem;
+  color: var(--c3); white-space: nowrap; flex-shrink: 0;
+}
+.cert-link:hover { color: #d080ff; text-decoration: none; }
+
+/* ── PROJETS ── */
+.proj-list { display: flex; flex-direction: column; gap: 12px; }
+.proj-item {
+  padding: 12px 16px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; border-left: 2px solid var(--c1);
+}
+.proj-header-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.proj-title { font-size: .82rem; font-weight: 700; color: var(--white); }
+.proj-links-row { display: flex; gap: 10px; margin-left: auto; }
+.proj-link {
+  font-family: 'JetBrains Mono', monospace; font-size: .63rem;
+  color: var(--c1);
+}
+.proj-desc { font-size: .77rem; color: var(--muted); line-height: 1.65; margin-bottom: 7px; }
+.proj-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* ── LANGUES & SOFTSKILLS ── */
+.lang-list { display: flex; flex-direction: column; gap: 10px; }
+.lang-item { display: flex; align-items: center; gap: 12px; }
+.lang-flag { font-size: 1.3rem; }
+.lang-name { font-size: .82rem; font-weight: 600; color: var(--white); }
+.lang-lvl { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--muted); }
+.lang-bar { flex: 1; height: 2px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.lang-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--c1), var(--c2)); box-shadow: 0 0 6px var(--c1); }
+
+.soft-list { display: flex; flex-direction: column; gap: 7px; }
+.soft-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: .8rem; color: var(--text);
+}
+.soft-item::before {
+  content: '›'; color: var(--c1); font-size: .9rem; flex-shrink: 0;
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  @page { margin: 15mm 18mm; size: A4; }
+  .print-bar { display: none !important; }
+  body { background: #fff !important; color: #111 !important; }
+  .page { padding: 0 !important; max-width: 100% !important; }
+  :root {
+    --bg: #fff; --bg2: #f5f5f5; --card: #f8f8f8;
+    --border: #ddd; --c1: #006699; --c2: #009944;
+    --c3: #7722aa; --text: #222; --muted: #555; --white: #000;
+  }
+  .cv-about { border-left-color: #006699; }
+  .tl-content { border-left-color: #ddd; }
+  .tl-content::before { border-color: #006699; box-shadow: none; }
+  .cert-item, .proj-item { box-shadow: none !important; }
+  .lang-fill { box-shadow: none; }
+  a { color: #006699 !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── BARRE DE CONTRÔLE ── -->
+<div class="print-bar">
+  <div class="print-bar-logo">EAS_CYBER · CV</div>
+  <div class="print-bar-btns">
+    <a href="index.html" class="btn-back">← Portfolio</a>
+    <button class="btn-print" onclick="window.print()">Imprimer / Export PDF</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="cv-header">
+    <div>
+      <div class="cv-name">EZEKIEL AMOUR T. <span>SOGLO</span></div>
+      <div class="cv-title">> Licence en Sécurité Informatique &nbsp;·&nbsp; Cybersécurité & Développement</div>
+      <div class="cv-contacts">
+        <div class="cv-contact-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a href="mailto:sogloamour76@gmail.com">sogloamour76@gmail.com</a>
+        </div>
+        <div class="cv-contact-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.59 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="tel:+22960398024">+229 60 39 80 24</a>
+        </div>
+        <div class="cv-contact-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Cotonou, Bénin
+        </div>
+        <div class="cv-contact-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <a href="https://github.com/jordansad" target="_blank">github.com/jordansad</a>
+        </div>
+        <div class="cv-contact-item">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <a href="https://www.linkedin.com/in/amour-soglo-a48a51387" target="_blank">linkedin.com/in/amour-soglo</a>
+        </div>
+      </div>
+    </div>
+    <div class="cv-status">
+      <div class="pulse"></div>
+      DISPONIBLE · STAGE / EMPLOI
+    </div>
+  </header>
+
+  <!-- ═══ PROFIL ═══ -->
+  <section class="cv-section">
+    <div class="cv-section-title">Profil</div>
+    <p class="cv-about">
+      Titulaire d'une <strong>Licence en Sécurité Informatique</strong> obtenue à la <strong>HECM</strong> de Cotonou, Bénin.
+      Certifié <strong>Cisco Networking Academy</strong> et <strong>ANSSI SecNum Académie</strong>, je maîtrise des outils comme
+      <strong>Kali Linux</strong>, Cisco Packet Tracer et les environnements Linux/Windows. Je possède de solides compétences
+      en développement web sécurisé (Node.js, React, PHP) et en architecture de systèmes. Je recherche une opportunité en
+      <strong>cybersécurité</strong> pour contribuer à la protection des infrastructures critiques.
+    </p>
+  </section>
+
+  <!-- ═══ COMPÉTENCES + LANGUES ═══ -->
+  <div class="two-col">
+    <section class="cv-section">
+      <div class="cv-section-title">Compétences techniques</div>
+
+      <div class="skill-group">
+        <div class="skill-group-name">Cybersécurité</div>
+        <div class="skill-tags">
+          <span class="stag stag-c">Principes CIA</span>
+          <span class="stag stag-c">Analyse menaces</span>
+          <span class="stag stag-c">Firewall</span>
+          <span class="stag stag-c">IDS / IPS</span>
+          <span class="stag stag-c">Gestion vulnérabilités</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-name">Réseaux</div>
+        <div class="skill-tags">
+          <span class="stag stag-g">TCP/IP</span>
+          <span class="stag stag-g">DNS</span>
+          <span class="stag stag-g">DHCP</span>
+          <span class="stag stag-g">Modèle OSI</span>
+          <span class="stag stag-g">Packet Tracer</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-name">Langages & Développement</div>
+        <div class="skill-tags">
+          <span class="stag stag-a">JavaScript</span>
+          <span class="stag stag-a">Node.js</span>
+          <span class="stag stag-a">React.js</span>
+          <span class="stag stag-a">PHP</span>
+          <span class="stag stag-a">C++</span>
+          <span class="stag stag-a">SQL</span>
+          <span class="stag stag-a">HTML / CSS</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-name">Systèmes & Outils</div>
+        <div class="skill-tags">
+          <span class="stag stag-p">Kali Linux</span>
+          <span class="stag stag-p">Linux</span>
+          <span class="stag stag-p">Windows</span>
+          <span class="stag stag-p">PostgreSQL</span>
+          <span class="stag stag-p">SQLite</span>
+          <span class="stag stag-p">REST API</span>
+          <span class="stag stag-p">JWT Auth</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="cv-section">
+      <div class="cv-section-title">Langues</div>
+      <div class="lang-list" style="margin-bottom:20px">
+        <div class="lang-item">
+          <div class="lang-flag">🇫🇷</div>
+          <div>
+            <div class="lang-name">Français</div>
+            <div class="lang-lvl">Courant — Langue maternelle</div>
+          </div>
+          <div class="lang-bar"><div class="lang-fill" style="width:95%"></div></div>
+        </div>
+        <div class="lang-item">
+          <div class="lang-flag">🇬🇧</div>
+          <div>
+            <div class="lang-name">Anglais</div>
+            <div class="lang-lvl">Intermédiaire — Lecture technique IT</div>
+          </div>
+          <div class="lang-bar"><div class="lang-fill" style="width:55%"></div></div>
+        </div>
+      </div>
+
+      <div class="cv-section-title">Soft Skills</div>
+      <div class="soft-list">
+        <div class="soft-item">Esprit analytique &amp; sens du détail</div>
+        <div class="soft-item">Apprentissage rapide &amp; autonomie</div>
+        <div class="soft-item">Travail en équipe &amp; collaboration</div>
+        <div class="soft-item">Rigueur &amp; sens des responsabilités</div>
+        <div class="soft-item">Résolution de problèmes complexes</div>
+        <div class="soft-item">Respect de la confidentialité</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ FORMATION ═══ -->
+  <section class="cv-section">
+    <div class="cv-section-title">Formation</div>
+    <div class="tl-item">
+      <div class="tl-date">2023 — 2026</div>
+      <div class="tl-content">
+        <div class="tl-title">Licence en Sécurité Informatique</div>
+        <div class="tl-sub">Haute Ecole du Commerce et du Management (HECM) — Cotonou, Bénin</div>
+        <span class="tl-badge badge-done">Obtenu</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2021 — 2023</div>
+      <div class="tl-content">
+        <div class="tl-title">Formation professionnelle en Informatique</div>
+        <div class="tl-sub">TAHA ENTERPRISES (Dr. Computer) — Cotonou, Bénin</div>
+        <span class="tl-badge badge-done">Obtenu</span>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2020 — 2021</div>
+      <div class="tl-content">
+        <div class="tl-title">Baccalauréat</div>
+        <div class="tl-sub">CS Sainte Thérèse d'Avila — Natitingou, Bénin</div>
+        <span class="tl-badge badge-done">Obtenu</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CERTIFICATIONS ═══ -->
+  <section class="cv-section">
+    <div class="cv-section-title">Certifications</div>
+    <div class="cert-list">
+
+      <div class="cert-item anssi">
+        <div class="cert-ico cert-ico-anssi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#bf5af2" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">SecNum Académie</div>
+          <div class="cert-issuer">ANSSI — Agence Nationale de la Sécurité des Systèmes d'Information</div>
+        </div>
+        <a href="certif-secnum.pdf" target="_blank" class="cert-link">↗ Certificat</a>
+      </div>
+
+      <div class="cert-item">
+        <div class="cert-ico cert-ico-cisco">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">Introduction to Cybersecurity</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+        </div>
+      </div>
+
+      <div class="cert-item">
+        <div class="cert-ico cert-ico-cisco">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">Cybersecurity Course Completion</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+        </div>
+      </div>
+
+      <div class="cert-item">
+        <div class="cert-ico cert-ico-cisco">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">Getting Started with Cisco Packet Tracer</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+        </div>
+      </div>
+
+      <div class="cert-item">
+        <div class="cert-ico cert-ico-cisco">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f5ff" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        </div>
+        <div>
+          <div class="cert-name">Introduction to Modern AI</div>
+          <div class="cert-issuer">Cisco Networking Academy</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ PROJETS ═══ -->
+  <section class="cv-section">
+    <div class="cv-section-title">Projets</div>
+    <div class="proj-list">
+
+      <div class="proj-item">
+        <div class="proj-header-row">
+          <div class="proj-title">NationalFinance — Banque en ligne</div>
+          <div class="proj-links-row">
+            <a href="https://nationalfinance.onrender.com" target="_blank" class="proj-link">↗ Live</a>
+            <a href="https://github.com/Jordansad/banque-en-ligne" target="_blank" class="proj-link">↗ GitHub</a>
+          </div>
+        </div>
+        <div class="proj-desc">Plateforme bancaire complète avec espace client, dashboard admin, virements sécurisés avec validation par code et transactions en temps réel.</div>
+        <div class="proj-tags">
+          <span class="stag stag-a">Node.js</span>
+          <span class="stag stag-a">SQLite</span>
+          <span class="stag stag-c">JWT Auth</span>
+        </div>
+      </div>
+
+      <div class="proj-item">
+        <div class="proj-header-row">
+          <div class="proj-title">VériCode — Vérification & Remboursement</div>
+          <div class="proj-links-row">
+            <a href="https://verification-site-xj7p.onrender.com" target="_blank" class="proj-link">↗ Live</a>
+            <a href="https://github.com/Jordansad/verification-site" target="_blank" class="proj-link">↗ GitHub</a>
+          </div>
+        </div>
+        <div class="proj-desc">Plateforme sécurisée de vérification de codes et gestion de remboursements en ligne avec interface utilisateur moderne.</div>
+        <div class="proj-tags">
+          <span class="stag stag-a">JavaScript</span>
+          <span class="stag stag-a">Node.js</span>
+          <span class="stag stag-g">REST API</span>
+        </div>
+      </div>
+
+      <div class="proj-item" style="border-left-color:var(--c2)">
+        <div class="proj-header-row">
+          <div class="proj-title">Réseau Simulé Sécurisé</div>
+        </div>
+        <div class="proj-desc">Conception d'un réseau sous Cisco Packet Tracer, identification des vulnérabilités et mise en place de règles de sécurité pour protéger l'infrastructure.</div>
+        <div class="proj-tags">
+          <span class="stag stag-c">Packet Tracer</span>
+          <span class="stag stag-g">Firewall</span>
+          <span class="stag stag-c">TCP/IP</span>
+        </div>
+      </div>
+
+      <div class="proj-item" style="border-left-color:var(--c2)">
+        <div class="proj-header-row">
+          <div class="proj-title">Analyse de Vulnérabilités Linux</div>
+        </div>
+        <div class="proj-desc">Étude des configurations système, identification des failles potentielles et application de mesures de protection sur environnement Linux.</div>
+        <div class="proj-tags">
+          <span class="stag stag-p">Kali Linux</span>
+          <span class="stag stag-c">Audit sécurité</span>
+          <span class="stag stag-g">Hardening</span>
+        </div>
+      </div>
+
+      <div class="proj-item">
+        <div class="proj-header-row">
+          <div class="proj-title">Application Web de Gestion</div>
+        </div>
+        <div class="proj-desc">Architecture client/serveur complète avec backend Node.js, interfaces React.js, base PostgreSQL et requêtes SQL sécurisées.</div>
+        <div class="proj-tags">
+          <span class="stag stag-a">React.js</span>
+          <span class="stag stag-c">PostgreSQL</span>
+          <span class="stag stag-g">REST API</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+</body>
+</html>
