@@ -130,10 +130,19 @@ nav::after{
 .hero-pin-wrap{
   position:relative;height:230vh;
 }
+/* Sticky stage: ALWAYS exactly one viewport tall, holds only the video.
+   Kept separate from .hero so the (possibly taller, stacked-on-mobile)
+   text content below is never clipped by the pin's fixed-height box. */
+.hero-video-stage{
+  position:sticky;top:0;height:100vh;height:100svh;
+  overflow:hidden;z-index:1;perspective:1200px;
+}
 .hero{
-  min-height:100vh;height:100vh;height:100svh;display:flex;align-items:center;
-  padding-top:66px;position:sticky;top:0;overflow:hidden;
-  perspective:1200px;
+  position:relative;z-index:3;
+  min-height:100vh;min-height:100svh;
+  margin-top:-100vh;margin-top:-100svh;
+  display:flex;align-items:center;
+  padding-top:66px;
 }
 .hero-inner{
   display:grid;grid-template-columns:1fr 400px;
@@ -189,7 +198,8 @@ body.light-mode .hero-video-overlay{
   100%{left:130%}
 }
 
-/* Scroll hint */
+/* Scroll hint — lives in the video stage so it always sits at the true
+   viewport bottom, regardless of how tall the hero text stacks on mobile */
 .hero-scroll-hint{
   position:absolute;left:50%;bottom:28px;z-index:3;
   transform:translateX(-50%);
@@ -208,7 +218,8 @@ body.light-mode .hero-video-overlay{
 
 @media(prefers-reduced-motion:reduce){
   .hero-pin-wrap{height:auto}
-  .hero{position:relative}
+  .hero-video-stage{position:relative}
+  .hero{margin-top:0}
   .hero-video-inner{animation:none;opacity:1;transform:none}
   .hero-video-inner::after{display:none}
   .hero-video-layer,.hero-inner{transform:none!important}
@@ -824,6 +835,7 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
   .hamburger{display:flex}
   .hero-inner{grid-template-columns:1fr;text-align:center}
   .hero-pin-wrap{height:190vh}
+  .hero-scroll-hint{display:none}
   .hero-visual{display:flex;order:-1;margin-bottom:28px}
   .hex-frame{width:200px;height:228px}
   .hex-photo{width:168px;height:168px}
@@ -886,7 +898,7 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
 
 <!-- ══ HERO ══ -->
 <div class="hero-pin-wrap" id="heroPinWrap">
-<section class="hero" id="home">
+<div class="hero-video-stage" id="heroVideoStage">
   <div class="hero-video-layer" id="heroVideoLayer">
     <div class="hero-video-inner">
       <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="hero-poster.jpg">
@@ -895,6 +907,12 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
       <div class="hero-video-overlay"></div>
     </div>
   </div>
+  <div class="hero-scroll-hint">
+    <span>SCROLL</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</div>
+<section class="hero" id="home">
   <div class="container">
     <div class="hero-inner" id="heroInner">
       <div class="hero-content">
@@ -961,10 +979,6 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
         </div>
       </div>
     </div>
-  </div>
-  <div class="hero-scroll-hint">
-    <span>SCROLL</span>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
 </section>
 </div>
@@ -1643,7 +1657,7 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
     videoLayer.style.filter = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : '';
 
     if(heroInner){
-      heroInner.style.opacity = String(Math.max(1 - progress * 1.5, 0));
+      heroInner.style.opacity = String(Math.max(1 - progress * 2.6, 0));
       heroInner.style.transform = `translateY(${-progress * 70}px)`;
     }
     if(scrollHint) scrollHint.classList.toggle('hidden', progress > 0.03);
