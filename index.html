@@ -131,7 +131,7 @@ nav::after{
   position:relative;height:230vh;
 }
 .hero{
-  min-height:100vh;height:100vh;display:flex;align-items:center;
+  min-height:100vh;height:100vh;height:100svh;display:flex;align-items:center;
   padding-top:66px;position:sticky;top:0;overflow:hidden;
   perspective:1200px;
 }
@@ -142,17 +142,29 @@ nav::after{
   will-change:transform,opacity;
 }
 
-/* ── HERO VIDEO LAYER ── */
+/* ── HERO VIDEO LAYER ──
+   .hero-video-layer is JS-controlled every frame (scroll shrink + mouse tilt).
+   The load-in zoom/sweep animate a nested .hero-video-inner instead, so the
+   CSS animation's `forwards` fill never fights the JS inline transform. */
 .hero-video-layer{
   position:absolute;inset:0;z-index:1;overflow:hidden;
   transform-origin:50% 0%;
-  will-change:transform,border-radius;
-  transform:translateZ(0) scale(1);
+  will-change:transform,border-radius,filter;
+}
+.hero-video-inner{
+  position:absolute;inset:0;
+  transform:scale(1.14);
+  opacity:0;
+  animation:heroVideoIn 1.3s cubic-bezier(.16,1,.3,1) .15s forwards;
+}
+@keyframes heroVideoIn{
+  0%{opacity:0;transform:scale(1.14)}
+  100%{opacity:1;transform:scale(1)}
 }
 .hero-video-layer video{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:center;
-  filter:saturate(1.08) contrast(1.06);
+  filter:saturate(1.14) contrast(1.08);
 }
 .hero-video-overlay{
   position:absolute;inset:0;z-index:2;pointer-events:none;
@@ -165,10 +177,42 @@ body.light-mode .hero-video-overlay{
     linear-gradient(180deg,rgba(240,244,255,.4) 0%,rgba(240,244,255,.3) 35%,rgba(240,244,255,.7) 78%,var(--bg) 100%),
     radial-gradient(ellipse at 50% 30%,transparent 25%,rgba(240,244,255,.6) 100%);
 }
+/* One-shot diagonal light sweep on load, echoes the video's anamorphic flare */
+.hero-video-inner::after{
+  content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;z-index:3;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.25),transparent);
+  transform:skewX(-18deg);
+  animation:heroSweep 1.4s cubic-bezier(.16,1,.3,1) 1s 1;
+}
+@keyframes heroSweep{
+  0%{left:-60%}
+  100%{left:130%}
+}
+
+/* Scroll hint */
+.hero-scroll-hint{
+  position:absolute;left:50%;bottom:28px;z-index:3;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-family:'JetBrains Mono',monospace;font-size:.63rem;
+  color:var(--c1);letter-spacing:.12em;text-transform:uppercase;
+  opacity:.85;transition:opacity .4s ease;
+  pointer-events:none;
+}
+.hero-scroll-hint svg{animation:scrollHintBounce 1.8s ease-in-out infinite}
+@keyframes scrollHintBounce{
+  0%,100%{transform:translateY(0);opacity:.5}
+  50%{transform:translateY(7px);opacity:1}
+}
+.hero-scroll-hint.hidden{opacity:0}
+
 @media(prefers-reduced-motion:reduce){
   .hero-pin-wrap{height:auto}
   .hero{position:relative}
+  .hero-video-inner{animation:none;opacity:1;transform:none}
+  .hero-video-inner::after{display:none}
   .hero-video-layer,.hero-inner{transform:none!important}
+  .hero-scroll-hint{display:none}
 }
 
 /* Status pill */
@@ -779,9 +823,7 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
   .nav-links.open{display:flex}
   .hamburger{display:flex}
   .hero-inner{grid-template-columns:1fr;text-align:center}
-  .hero-pin-wrap{height:auto}
-  .hero{position:relative;height:auto;min-height:100vh}
-  .hero-video-layer{transform:none!important;border-radius:0!important}
+  .hero-pin-wrap{height:190vh}
   .hero-visual{display:flex;order:-1;margin-bottom:28px}
   .hex-frame{width:200px;height:228px}
   .hex-photo{width:168px;height:168px}
@@ -846,10 +888,12 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
 <div class="hero-pin-wrap" id="heroPinWrap">
 <section class="hero" id="home">
   <div class="hero-video-layer" id="heroVideoLayer">
-    <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="hero-poster.jpg">
-      <source src="hero-video.mp4" type="video/mp4">
-    </video>
-    <div class="hero-video-overlay"></div>
+    <div class="hero-video-inner">
+      <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="hero-poster.jpg">
+        <source src="hero-video.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-overlay"></div>
+    </div>
   </div>
   <div class="container">
     <div class="hero-inner" id="heroInner">
@@ -917,6 +961,10 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
         </div>
       </div>
     </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>SCROLL</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
 </section>
 </div>
@@ -1561,7 +1609,7 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const isMobile = () => window.innerWidth <= 960;
+  const scrollHint = document.querySelector('.hero-scroll-hint');
 
   if(video) video.play().catch(()=>{});
 
@@ -1573,7 +1621,7 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
   let scrollTicking = false, hoverRaf = null;
 
   function computeProgress(){
-    if(reduceMotion || isMobile()){ progress = 0; return; }
+    if(reduceMotion){ progress = 0; return; }
     const rect = wrap.getBoundingClientRect();
     const total = wrap.offsetHeight - window.innerHeight;
     progress = total > 0 ? Math.min(Math.max(-rect.top / total, 0), 1) : 0;
@@ -1581,9 +1629,10 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
 
   function render(){
     const p = easeOutCubic(progress);
-    const scale = 1 - p * 0.42;
-    const radius = p * 32;
-    const shiftY = p * 50;
+    const scale = 1 - p * 0.55;
+    const radius = p * 40;
+    const shiftY = p * 60;
+    const blur = Math.sin(Math.min(progress, 0.6) / 0.6 * Math.PI) * 2.5;
 
     tiltX += (targetTiltX - tiltX) * 0.08;
     tiltY += (targetTiltY - tiltY) * 0.08;
@@ -1591,11 +1640,13 @@ body.light-mode nav{background:rgba(240,244,255,.93)}
     videoLayer.style.transform =
       `translateY(${shiftY}px) scale(${scale}) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
     videoLayer.style.borderRadius = `${radius}px`;
+    videoLayer.style.filter = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : '';
 
     if(heroInner){
       heroInner.style.opacity = String(Math.max(1 - progress * 1.5, 0));
       heroInner.style.transform = `translateY(${-progress * 70}px)`;
     }
+    if(scrollHint) scrollHint.classList.toggle('hidden', progress > 0.03);
     scrollTicking = false;
   }
 
