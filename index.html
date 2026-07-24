@@ -782,11 +782,16 @@ footer .accent{color:var(--c1)}
 body.light-mode{
   --bg:#f0f4ff;--bg2:#e8eeff;--card:#ffffff;
   --border:#d0ddf5;--border2:#c0d0f0;
-  --text:#1a2a50;--muted:#607098;--white:#0a1a3a;
+  --text:#1a2a50;--muted:#4a5d85;--white:#0a1a3a;
+  /* Neon accents are tuned for a near-black background; on a light
+     background they're used both as text and as button fills, so they're
+     darkened here to keep enough contrast in both roles. */
+  --c1:#00778f;--c1d:#005f73;--c2:#1f8f37;--c3:#8a2be2;
 }
 body.light-mode #particles-canvas{opacity:.1}
 body.light-mode::after{display:none}
 body.light-mode nav{background:rgba(240,244,255,.93)}
+body.light-mode .nav-links{background:rgba(240,244,255,.97)}
 
 /* ══════════════════════════════════════════
    SCROLL TOP
