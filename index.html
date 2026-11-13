@@ -31,12 +31,19 @@
   --c3:      #bf5af2;   /* violet */
   --c4:      #ff006e;   /* rose vif */
   --c1d:     #00b8c4;
+  --c1-rgb:  0,245,255;
   --text:    #c8d8f0;
   --muted:   #4a6080;
   --white:   #f0f8ff;
   --r:       8px;
   --r2:      14px;
   --tr:      .3s cubic-bezier(.4,0,.2,1);
+  --ease-out-expo: cubic-bezier(.16,1,.3,1);
+  --section-pad-y: clamp(72px, 12vh, 160px);
+  --fs-hero: clamp(2.6rem, 9vw, 7rem);
+  --fs-sec: clamp(2.1rem, 5vw, 3.6rem);
+  --z-cursor: 1500;
+  --z-loader: 2000;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -46,11 +53,39 @@ body{
   color:var(--text);
   min-height:100vh;
   overflow-x:hidden;
+  cursor:none;
 }
+@media (hover:none) and (pointer:coarse){ body,button{cursor:auto!important} }
 a{text-decoration:none;color:inherit}
-button{cursor:pointer;border:none;font-family:inherit}
-section{padding:100px 0}
+button{cursor:none;border:none;font-family:inherit}
+section{padding:var(--section-pad-y) 0}
 img{display:block}
+::selection{background:var(--c1);color:var(--bg)}
+
+/* ══════════════════════════════════════════
+   LOADER
+══════════════════════════════════════════ */
+.loader{
+  position:fixed;inset:0;z-index:var(--z-loader);
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .6s var(--ease-out-expo);
+}
+.loader__inner{display:flex;align-items:center;gap:20px;width:min(380px,70vw)}
+.loader__logo{font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:700;color:var(--c1);letter-spacing:.14em;white-space:nowrap;text-shadow:0 0 16px rgba(var(--c1-rgb),.5)}
+.loader__rule{flex:1;height:1px;background:var(--border2);overflow:hidden}
+.loader__rule-fill{height:100%;width:100%;background:var(--c1);transform-origin:0;transform:scaleX(0);box-shadow:0 0 10px var(--c1)}
+.loader__pct{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);width:3.5ch}
+
+/* ══════════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════════ */
+.cursor-layer{position:fixed;inset:0;z-index:var(--z-cursor);pointer-events:none}
+@media (hover:none),(pointer:coarse){.cursor-layer{display:none}}
+.cursor-dot,.cursor-ring{position:absolute;top:0;left:0;transform:translate(-50%,-50%);border-radius:50%}
+.cursor-dot{width:6px;height:6px;background:var(--c1);box-shadow:0 0 8px var(--c1)}
+.cursor-ring{width:34px;height:34px;border:1px solid var(--border2);transition:width .35s var(--ease-out-expo),height .35s var(--ease-out-expo),border-color .35s,background .35s}
+.cursor-ring.is-link{width:60px;height:60px;border-color:var(--c1);background:rgba(var(--c1-rgb),.08)}
 
 /* ══════════════════════════════════════════
    CANVAS & SCANLINE
@@ -72,7 +107,7 @@ body::after{
    CONTAINER
 ══════════════════════════════════════════ */
 .container{
-  max-width:1140px;margin:0 auto;padding:0 28px;
+  width:100%;max-width:1140px;margin:0 auto;padding:0 28px;
   position:relative;z-index:2;
 }
 
@@ -125,14 +160,27 @@ nav::after{
 .hamburger span{display:block;width:22px;height:1.5px;background:var(--c1);border-radius:2px;transition:all var(--tr)}
 
 /* ══════════════════════════════════════════
+   MAGNETIC BUTTONS (corner brackets)
+══════════════════════════════════════════ */
+.btn-cyber{position:relative}
+.btn-cyber::before,.btn-cyber::after{
+  content:'';position:absolute;top:0;bottom:0;width:10px;
+  border:1px solid var(--c1);opacity:0;
+  transition:transform .45s var(--ease-out-expo),opacity .3s;
+}
+.btn-cyber::before{left:-8px;border-right:none;transform:translateX(6px)}
+.btn-cyber::after{right:-8px;border-left:none;transform:translateX(-6px)}
+.btn-cyber:hover::before{opacity:1;transform:translateX(-6px)}
+.btn-cyber:hover::after{opacity:1;transform:translateX(6px)}
+.btn-cyber.outline::before,.btn-cyber.outline::after{border-color:var(--border2)}
+.btn-cyber.outline:hover::before,.btn-cyber.outline:hover::after{border-color:var(--c1)}
+
+/* ══════════════════════════════════════════
    HERO
 ══════════════════════════════════════════ */
 .hero-pin-wrap{
   position:relative;height:230vh;
 }
-/* Sticky stage: ALWAYS exactly one viewport tall, holds only the video.
-   Kept separate from .hero so the (possibly taller, stacked-on-mobile)
-   text content below is never clipped by the pin's fixed-height box. */
 .hero-video-stage{
   position:sticky;top:0;height:100vh;height:100svh;
   overflow:hidden;z-index:1;perspective:1200px;
@@ -145,16 +193,11 @@ nav::after{
   padding-top:66px;
 }
 .hero-inner{
-  display:grid;grid-template-columns:1fr 400px;
-  gap:70px;align-items:center;width:100%;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  max-width:880px;margin:0 auto;gap:0;width:100%;
   position:relative;z-index:3;
   will-change:transform,opacity;
 }
-
-/* ── HERO VIDEO LAYER ──
-   .hero-video-layer is JS-controlled every frame (scroll shrink + mouse tilt).
-   The load-in zoom/sweep animate a nested .hero-video-inner instead, so the
-   CSS animation's `forwards` fill never fights the JS inline transform. */
 .hero-video-layer{
   position:absolute;inset:0;z-index:1;overflow:hidden;
   transform-origin:50% 0%;
@@ -186,7 +229,6 @@ body.light-mode .hero-video-overlay{
     linear-gradient(180deg,rgba(240,244,255,.4) 0%,rgba(240,244,255,.3) 35%,rgba(240,244,255,.7) 78%,var(--bg) 100%),
     radial-gradient(ellipse at 50% 30%,transparent 25%,rgba(240,244,255,.6) 100%);
 }
-/* One-shot diagonal light sweep on load, echoes the video's anamorphic flare */
 .hero-video-inner::after{
   content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;z-index:3;
   background:linear-gradient(100deg,transparent,rgba(255,255,255,.25),transparent);
@@ -197,9 +239,6 @@ body.light-mode .hero-video-overlay{
   0%{left:-60%}
   100%{left:130%}
 }
-
-/* Scroll hint — lives in the video stage so it always sits at the true
-   viewport bottom, regardless of how tall the hero text stacks on mobile */
 .hero-scroll-hint{
   position:absolute;left:50%;bottom:28px;z-index:3;
   transform:translateX(-50%);
@@ -226,9 +265,9 @@ body.light-mode .hero-video-overlay{
   .hero-scroll-hint{display:none}
 }
 
-/* Status pill */
 .hero-status{
-  display:inline-flex;align-items:center;gap:10px;
+  display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+  max-width:100%;
   background:rgba(0,245,255,.05);
   border:1px solid rgba(0,245,255,.2);
   border-radius:4px;padding:7px 16px;
@@ -242,12 +281,12 @@ body.light-mode .hero-video-overlay{
 }
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.6}}
 
-/* Glitch name */
 .hero-name{
   font-family:'Orbitron',sans-serif;
-  font-size:clamp(2rem,4.5vw,3.4rem);
+  font-size:var(--fs-hero);
   font-weight:900;color:var(--white);
-  line-height:1.08;margin-bottom:6px;
+  line-height:.98;margin-bottom:22px;
+  letter-spacing:-.01em;
   position:relative;
 }
 .hero-name .line2{
@@ -287,41 +326,41 @@ body.light-mode .hero-video-overlay{
 }
 
 .hero-sub{
-  font-family:'JetBrains Mono',monospace;font-size:1rem;
-  color:var(--c1);margin-bottom:24px;min-height:28px;
+  font-family:'JetBrains Mono',monospace;font-size:clamp(.95rem,1.6vw,1.15rem);
+  color:var(--c1);margin-bottom:26px;min-height:28px;
   text-shadow:0 0 16px rgba(0,245,255,.4);
 }
 .hero-sub .caret{animation:caret .8s step-end infinite}
 @keyframes caret{0%,100%{opacity:1}50%{opacity:0}}
 
 .hero-desc{
-  font-size:.9rem;color:var(--muted);line-height:1.85;
-  max-width:520px;margin-bottom:34px;
+  font-size:.92rem;color:var(--muted);line-height:1.85;
+  max-width:560px;margin:0 auto 34px;
   border-left:2px solid var(--border2);padding-left:16px;
+  text-align:left;
 }
 .hero-desc strong{color:var(--text)}
 
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:44px}
 .btn-cyber{
   display:inline-flex;align-items:center;gap:9px;
   padding:12px 26px;border-radius:4px;
   font-size:.82rem;font-weight:700;font-family:'JetBrains Mono',monospace;
   letter-spacing:.06em;text-transform:uppercase;
-  position:relative;overflow:hidden;transition:all var(--tr);
+  transition:all var(--tr);
 }
 .btn-cyber.primary{
   background:linear-gradient(135deg,var(--c1),var(--c1d));
   color:var(--bg);box-shadow:0 0 24px rgba(0,245,255,.25);
 }
-.btn-cyber.primary:hover{box-shadow:0 0 40px rgba(0,245,255,.5);transform:translateY(-2px)}
+.btn-cyber.primary:hover{box-shadow:0 0 40px rgba(0,245,255,.5)}
 .btn-cyber.outline{
   border:1px solid var(--border2);color:var(--text);
   background:rgba(255,255,255,.02);
 }
 .btn-cyber.outline:hover{border-color:var(--c1);color:var(--c1);text-shadow:0 0 10px rgba(0,245,255,.4)}
 
-/* Stats */
-.hero-stats{display:flex;gap:32px}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap;row-gap:18px;justify-content:center;max-width:100%}
 .stat-item{position:relative}
 .stat-num{
   font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:800;
@@ -331,14 +370,14 @@ body.light-mode .hero-video-overlay{
 .stat-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
 .stat-sep{width:1px;background:var(--border);align-self:stretch}
 
-/* ── HERO PHOTO ── */
-.hero-visual{display:flex;align-items:center;justify-content:center;position:relative}
+/* ── HERO AVATAR (compact) ── */
+.hero-visual{display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:24px}
 .hex-frame{
-  position:relative;width:300px;height:340px;
+  position:relative;width:148px;height:168px;
   display:flex;align-items:center;justify-content:center;
 }
 .hex-photo{
-  width:260px;height:260px;
+  width:128px;height:128px;
   clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
   position:relative;z-index:2;overflow:hidden;
 }
@@ -363,21 +402,20 @@ body.light-mode .hero-video-overlay{
   position:absolute;border:1px solid rgba(0,245,255,.1);
   border-radius:50%;animation:spin 20s linear infinite;
 }
-.hex-ring:nth-child(1){width:340px;height:340px;top:-40px;left:-20px}
-.hex-ring:nth-child(2){width:400px;height:400px;top:-70px;left:-50px;animation-duration:30s;animation-direction:reverse}
-.hex-ring:nth-child(3){width:460px;height:460px;top:-100px;left:-80px;animation-duration:40s}
+.hex-ring:nth-child(1){width:172px;height:172px;top:-18px;left:-12px}
+.hex-ring:nth-child(2){width:204px;height:204px;top:-36px;left:-28px;animation-duration:30s;animation-direction:reverse}
+.hex-ring:nth-child(3){width:236px;height:236px;top:-54px;left:-44px;animation-duration:40s}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-
 .hex-badge{
-  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
   background:rgba(3,7,15,.9);border:1px solid var(--c1);
-  padding:6px 18px;border-radius:4px;white-space:nowrap;z-index:3;
-  font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--c1);
-  letter-spacing:.08em;text-shadow:0 0 10px rgba(0,245,255,.5);
+  padding:5px 14px;border-radius:4px;white-space:nowrap;z-index:3;
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--c1);
+  letter-spacing:.07em;text-shadow:0 0 10px rgba(0,245,255,.5);
 }
 .hex-dot{
-  position:absolute;top:16px;right:0;z-index:3;
-  width:12px;height:12px;border-radius:50%;background:var(--c2);
+  position:absolute;top:10px;right:6px;z-index:3;
+  width:11px;height:11px;border-radius:50%;background:var(--c2);
   border:2px solid var(--bg);box-shadow:0 0 14px var(--c2);
   animation:pulse 1.8s ease-in-out infinite;
 }
@@ -385,24 +423,23 @@ body.light-mode .hero-video-overlay{
 /* ══════════════════════════════════════════
    SECTION HEADERS
 ══════════════════════════════════════════ */
-.section-header{text-align:center;margin-bottom:64px}
+.section-header{text-align:center;margin-bottom:clamp(48px,8vh,96px)}
 .sec-tag{
   display:inline-flex;align-items:center;gap:8px;
   font-family:'JetBrains Mono',monospace;font-size:.68rem;
   color:var(--c1);letter-spacing:.14em;text-transform:uppercase;
-  margin-bottom:16px;
+  margin-bottom:20px;
 }
 .sec-tag::before,.sec-tag::after{content:'';flex:1;height:1px;width:40px;background:linear-gradient(90deg,transparent,var(--c1))}
 .sec-tag::after{background:linear-gradient(90deg,var(--c1),transparent)}
 .sec-title{
   font-family:'Orbitron',sans-serif;
-  font-size:clamp(1.5rem,3vw,2rem);
-  font-weight:800;color:var(--white);margin-bottom:10px;
-  letter-spacing:.05em;
+  font-size:var(--fs-sec);
+  font-weight:800;color:var(--white);margin-bottom:14px;
+  letter-spacing:.02em;line-height:1.05;
 }
-.sec-sub{font-size:.85rem;color:var(--muted);max-width:480px;margin:0 auto}
+.sec-sub{font-size:.9rem;color:var(--muted);max-width:480px;margin:0 auto}
 
-/* Section bg variants */
 .bg-alt{
   background-color:var(--bg2);
   background-image:
@@ -416,7 +453,6 @@ body.light-mode .hero-video-overlay{
    ABOUT
 ══════════════════════════════════════════ */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-
 .terminal-card{
   background:var(--card);
   border:1px solid var(--border2);
@@ -605,57 +641,50 @@ body.light-mode .hero-video-overlay{
 }
 
 /* ══════════════════════════════════════════
-   PROJETS
+   PROJETS — indexed list mechanic
 ══════════════════════════════════════════ */
-.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.proj-card{
-  background:var(--card);border:1px solid var(--border2);
-  border-radius:var(--r2);padding:0;
-  display:flex;flex-direction:column;
-  transition:border-color var(--tr),transform var(--tr),box-shadow var(--tr);
-  overflow:hidden;position:relative;
+.proj-list{border-top:1px solid var(--border);margin-top:32px}
+.proj-row{
+  position:relative;display:flex;align-items:center;gap:clamp(16px,3vw,40px);
+  padding:clamp(24px,4vh,40px) 4px;border-bottom:1px solid var(--border);
+  overflow:hidden;transition:background .4s;
 }
-.proj-card:hover{
-  border-color:rgba(0,245,255,.3);
-  transform:translateY(-6px);
-  box-shadow:0 24px 64px rgba(0,245,255,.1);
+.proj-row:hover{background:rgba(255,255,255,.015)}
+.proj-row__index{
+  font-family:'JetBrains Mono',monospace;font-size:.85rem;
+  color:var(--row-accent,var(--c1));flex-shrink:0;width:2.6ch;
 }
-.proj-header{
-  padding:14px 18px 12px;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:8px;
+.proj-row__body{flex:1;min-width:0}
+.proj-row__top{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:10px}
+.proj-row__title{
+  font-family:'Orbitron',sans-serif;font-weight:700;
+  font-size:clamp(1.05rem,2.2vw,1.5rem);color:var(--white);
+  letter-spacing:.03em;transition:color .35s;
 }
-.proj-header-dots{display:flex;gap:5px}
-.proj-header-dots span{width:8px;height:8px;border-radius:50%}
-.proj-header-dots .d1{background:#ff5f57}
-.proj-header-dots .d2{background:#febc2e}
-.proj-header-dots .d3{background:#28c840}
-.proj-type-label{
-  font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--muted);
-  letter-spacing:.08em;text-transform:uppercase;margin-left:4px;
+.proj-row:hover .proj-row__title{color:var(--row-accent,var(--c1))}
+.proj-row__tags{display:flex;flex-wrap:wrap;gap:6px}
+.proj-row__type{
+  font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);
+  letter-spacing:.08em;text-transform:uppercase;
 }
-.proj-body{padding:18px;flex:1;display:flex;flex-direction:column}
-.proj-title{
-  font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;
-  color:var(--white);margin-bottom:10px;letter-spacing:.03em;
-}
-.proj-desc{font-size:.78rem;color:var(--muted);line-height:1.75;flex:1;margin-bottom:14px}
-.proj-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
-.proj-links{display:flex;gap:12px;margin-top:auto}
-.proj-link{
+.proj-row__desc{font-size:.84rem;color:var(--muted);line-height:1.8;max-width:62ch;margin-bottom:12px}
+.proj-row__links{display:flex;gap:18px}
+.proj-row__link{
   display:inline-flex;align-items:center;gap:5px;
-  font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;
-  color:var(--c1);transition:color var(--tr),text-shadow var(--tr);
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;
+  color:var(--row-accent,var(--c1));transition:opacity var(--tr);
 }
-.proj-link:hover{color:var(--c2);text-shadow:0 0 10px rgba(57,255,20,.4)}
-
-/* Neon top bar on hover */
-.proj-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--c1),var(--c2));
-  transform:scaleX(0);transition:transform var(--tr);transform-origin:left;
+.proj-row__link:hover{opacity:.7}
+.proj-row__visual{
+  flex-shrink:0;width:clamp(50px,7vw,92px);height:clamp(50px,7vw,92px);
+  border-radius:50%;opacity:0;transition:opacity .4s;
+  background:radial-gradient(circle at 35% 30%, var(--row-accent,var(--c1)) 0%, transparent 72%);
 }
-.proj-card:hover::before{transform:scaleX(1)}
+.proj-row:hover .proj-row__visual{opacity:.45}
+@media(max-width:700px){
+  .proj-row{flex-wrap:wrap;gap:16px}
+  .proj-row__visual{display:none}
+}
 
 /* ══════════════════════════════════════════
    LANGUES
@@ -757,7 +786,7 @@ footer .accent{color:var(--c1)}
   border:1px solid var(--border2);
   background:rgba(0,245,255,.04);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all var(--tr);color:var(--c1);
+  cursor:none;transition:all var(--tr);color:var(--c1);
   flex-shrink:0;
 }
 .theme-toggle:hover{border-color:var(--c1);box-shadow:0 0 14px rgba(0,245,255,.3)}
@@ -783,9 +812,6 @@ body.light-mode{
   --bg:#f0f4ff;--bg2:#e8eeff;--card:#ffffff;
   --border:#d0ddf5;--border2:#c0d0f0;
   --text:#1a2a50;--muted:#4a5d85;--white:#0a1a3a;
-  /* Neon accents are tuned for a near-black background; on a light
-     background they're used both as text and as button fills, so they're
-     darkened here to keep enough contrast in both roles. */
   --c1:#00778f;--c1d:#005f73;--c2:#1f8f37;--c3:#8a2be2;
 }
 body.light-mode #particles-canvas{opacity:.1}
@@ -804,7 +830,7 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 0 20px rgba(0,245,255,.2);
   opacity:0;pointer-events:none;
-  transition:all var(--tr);cursor:pointer;
+  transition:all var(--tr);cursor:none;
 }
 #scrollTop.show{opacity:1;pointer-events:all}
 #scrollTop:hover{background:var(--c1)}
@@ -812,14 +838,9 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
 #scrollTop svg{color:var(--c1);transition:color var(--tr)}
 
 /* ══════════════════════════════════════════
-   FADE-IN ANIMATION
+   SCROLL REVEAL (driven by GSAP)
 ══════════════════════════════════════════ */
-.fade{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
-.fade.visible{opacity:1;transform:translateY(0)}
-.fade-l{opacity:0;transform:translateX(-28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
-.fade-l.visible{opacity:1;transform:translateX(0)}
-.fade-r{opacity:0;transform:translateX(28px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
-.fade-r.visible{opacity:1;transform:translateX(0)}
+.fade,.fade-l,.fade-r{opacity:0}
 
 /* ══════════════════════════════════════════
    RESPONSIVE
@@ -838,34 +859,40 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
   }
   .nav-links.open{display:flex}
   .hamburger{display:flex}
-  .hero-inner{grid-template-columns:1fr;text-align:center}
-  .hero-pin-wrap{height:190vh}
+  .hero-pin-wrap{height:210vh}
   .hero-scroll-hint{display:none}
-  .hero-visual{display:flex;order:-1;margin-bottom:28px}
-  .hex-frame{width:200px;height:228px}
-  .hex-photo{width:168px;height:168px}
-  .hex-ring:nth-child(1){width:228px;height:228px;top:-28px;left:-14px}
-  .hex-ring:nth-child(2){width:268px;height:268px;top:-50px;left:-34px}
-  .hex-ring:nth-child(3){width:308px;height:308px;top:-70px;left:-54px}
-  .hero-desc{border-left:none;padding-left:0;margin:0 auto 34px}
-  .hero-btns{justify-content:center}
-  .hero-stats{justify-content:center}
-  .about-grid{grid-template-columns:1fr}
-  .skills-grid{grid-template-columns:1fr 1fr}
-  .projects-grid{grid-template-columns:1fr 1fr}
-  .contact-grid{grid-template-columns:1fr}
-  .certs-grid{grid-template-columns:1fr}
-}
-@media(max-width:580px){
+  .hero-desc{text-align:center}
+  .hero-stats{gap:20px;row-gap:16px}
+  .hero-name{font-size:clamp(2.1rem,11vw,3.2rem)}
+  .about-grid{grid-template-columns:1fr;gap:36px}
   .skills-grid{grid-template-columns:1fr}
-  .projects-grid{grid-template-columns:1fr}
+  .certs-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
   .langs-wrap{grid-template-columns:1fr}
-  section{padding:70px 0}
-  .hero-stats{gap:20px}
+  .hex-frame{width:118px;height:134px}
+  .hex-photo{width:100px;height:100px}
+  .hex-ring:nth-child(1){width:140px;height:140px;top:-11px;left:-10px}
+  .hex-ring:nth-child(2){width:166px;height:166px;top:-24px;left:-23px}
+  .hex-ring:nth-child(3){width:192px;height:192px;top:-37px;left:-36px}
 }
 </style>
 </head>
 <body>
+
+<!-- ══ LOADER ══ -->
+<div class="loader" id="loader">
+  <div class="loader__inner">
+    <span class="loader__logo">EAS_CYBER</span>
+    <div class="loader__rule"><div class="loader__rule-fill" id="loaderFill"></div></div>
+    <span class="loader__pct" id="loaderPct">0%</span>
+  </div>
+</div>
+
+<!-- ══ CUSTOM CURSOR ══ -->
+<div class="cursor-layer">
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+</div>
 
 <!-- ══ CANVAS PARTICLES ══ -->
 <canvas id="particles-canvas"></canvas>
@@ -884,7 +911,7 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
       LinkedIn
     </a>
-    <a href="cv.html" target="_blank" class="nav-cta"><span>CV</span></a>
+    <a href="cv.html" target="_blank" class="nav-cta" data-magnetic><span>CV</span></a>
   </div>
   <div class="nav-controls">
     <div class="lang-switcher">
@@ -920,56 +947,6 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
 <section class="hero" id="home">
   <div class="container">
     <div class="hero-inner" id="heroInner">
-      <div class="hero-content">
-        <div class="hero-status">
-          <div class="pulse"></div>
-          <span data-i18n="hero.status">DISPONIBLE &nbsp;·&nbsp; STAGE / EMPLOI</span>
-        </div>
-
-        <h1 class="hero-name">
-          EZEKIEL AMOUR<br>
-          T. <span class="line2 glitch" data-text="SOGLO">SOGLO</span>
-        </h1>
-
-        <div class="hero-sub">
-          <span id="typed"></span><span class="caret">_</span>
-        </div>
-
-        <p class="hero-desc" data-i18n="hero.desc">
-          Titulaire d'une <strong>Licence en Sécurité Informatique</strong> à Cotonou, Bénin.
-          Certifié <strong>Cisco Networking Academy</strong>, passionné par la cyberdéfense,
-          l'analyse des menaces et le développement d'applications sécurisées.
-        </p>
-
-        <div class="hero-btns">
-          <a href="#projets" class="btn-cyber primary">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-            <span data-i18n="hero.btn1">Voir mes projets</span>
-          </a>
-          <a href="#contact" class="btn-cyber outline">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            <span data-i18n="hero.btn2">Me contacter</span>
-          </a>
-        </div>
-
-        <div class="hero-stats">
-          <div class="stat-item">
-            <div class="stat-num" data-count="4">0</div>
-            <div class="stat-lbl" data-i18n="hero.stat1">Certifications<br>Cisco</div>
-          </div>
-          <div class="stat-sep"></div>
-          <div class="stat-item">
-            <div class="stat-num" data-count="11">0</div>
-            <div class="stat-lbl" data-i18n="hero.stat2">Projets<br>réalisés</div>
-          </div>
-          <div class="stat-sep"></div>
-          <div class="stat-item">
-            <div class="stat-num" data-count="3">0</div>
-            <div class="stat-lbl" data-i18n="hero.stat3">Ans de<br>formation</div>
-          </div>
-        </div>
-      </div>
-
       <div class="hero-visual">
         <div class="hex-frame">
           <div class="hex-ring"></div>
@@ -981,6 +958,54 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
           </div>
           <div class="hex-dot"></div>
           <div class="hex-badge">[ LICENCE · CYBERSÉCURITÉ ]</div>
+        </div>
+      </div>
+
+      <div class="hero-status">
+        <div class="pulse"></div>
+        <span data-i18n="hero.status">DISPONIBLE &nbsp;·&nbsp; STAGE / EMPLOI</span>
+      </div>
+
+      <h1 class="hero-name">
+        EZEKIEL AMOUR<br>
+        T. <span class="line2 glitch" data-text="SOGLO">SOGLO</span>
+      </h1>
+
+      <div class="hero-sub">
+        <span id="typed"></span><span class="caret">_</span>
+      </div>
+
+      <p class="hero-desc" data-i18n="hero.desc">
+        Titulaire d'une <strong>Licence en Sécurité Informatique</strong> à Cotonou, Bénin.
+        Certifié <strong>Cisco Networking Academy</strong>, passionné par la cyberdéfense,
+        l'analyse des menaces et le développement d'applications sécurisées.
+      </p>
+
+      <div class="hero-btns">
+        <a href="#projets" class="btn-cyber primary" data-magnetic>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span data-i18n="hero.btn1">Voir mes projets</span>
+        </a>
+        <a href="#contact" class="btn-cyber outline" data-magnetic>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span data-i18n="hero.btn2">Me contacter</span>
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" data-count="4">0</div>
+          <div class="stat-lbl" data-i18n="hero.stat1">Certifications<br>Cisco</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <div class="stat-num" data-count="11">0</div>
+          <div class="stat-lbl" data-i18n="hero.stat2">Projets<br>réalisés</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <div class="stat-num" data-count="3">0</div>
+          <div class="stat-lbl" data-i18n="hero.stat3">Ans de<br>formation</div>
         </div>
       </div>
     </div>
@@ -1257,223 +1282,244 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
       <h2 class="sec-title" data-i18n="projets.title">Mes projets</h2>
       <p class="sec-sub" data-i18n="projets.sub">Cybersécurité, développement web et applications sécurisées</p>
     </div>
-    <div class="projects-grid">
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">cybersecurity</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">RÉSEAU SIMULÉ SÉCURISÉ</div>
-          <div class="proj-desc">Conception d'un réseau sous Cisco Packet Tracer, identification des vulnérabilités et mise en place de règles de sécurité pour protéger l'infrastructure.</div>
-          <div class="proj-tags">
+    <div class="proj-list">
+      <div class="proj-row fade" style="--row-accent:#00f5ff">
+        <div class="proj-row__index">01</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">RÉSEAU SIMULÉ SÉCURISÉ</div>
+            <div class="proj-row__type">cybersecurity</div>
+          </div>
+          <div class="proj-row__desc">Conception d'un réseau sous Cisco Packet Tracer, identification des vulnérabilités et mise en place de règles de sécurité pour protéger l'infrastructure.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-c">Packet Tracer</span>
             <span class="stag stag-g">Firewall</span>
             <span class="stag stag-c">TCP/IP</span>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">security audit</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">ANALYSE DE VULNÉRABILITÉS LINUX</div>
-          <div class="proj-desc">Étude des configurations système, identification des failles potentielles et application de mesures de protection sur environnement Linux.</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#39ff14">
+        <div class="proj-row__index">02</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">ANALYSE DE VULNÉRABILITÉS LINUX</div>
+            <div class="proj-row__type">security audit</div>
+          </div>
+          <div class="proj-row__desc">Étude des configurations système, identification des failles potentielles et application de mesures de protection sur environnement Linux.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-p">Kali Linux</span>
             <span class="stag stag-c">Audit sécurité</span>
             <span class="stag stag-g">Hardening</span>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">full stack</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">APPLICATION WEB DE GESTION</div>
-          <div class="proj-desc">Application complète avec architecture client/serveur, backend Node.js, interfaces dynamiques React.js, base PostgreSQL et requêtes SQL sécurisées.</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#bf5af2">
+        <div class="proj-row__index">03</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">APPLICATION WEB DE GESTION</div>
+            <div class="proj-row__type">full stack</div>
+          </div>
+          <div class="proj-row__desc">Application complète avec architecture client/serveur, backend Node.js, interfaces dynamiques React.js, base PostgreSQL et requêtes SQL sécurisées.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-a">React.js</span>
             <span class="stag stag-c">PostgreSQL</span>
             <span class="stag stag-g">REST API</span>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">development</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">SYSTÈME DE GESTION EN C++</div>
-          <div class="proj-desc">Application console en C++ avec structures de données avancées, gestion des entrées utilisateurs et validation robuste des données.</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#ffb347">
+        <div class="proj-row__index">04</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">SYSTÈME DE GESTION EN C++</div>
+            <div class="proj-row__type">development</div>
+          </div>
+          <div class="proj-row__desc">Application console en C++ avec structures de données avancées, gestion des entrées utilisateurs et validation robuste des données.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-p">C++</span>
             <span class="stag stag-p">Structures de données</span>
             <span class="stag stag-p">Algorithmique</span>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">web app</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">CONTENEUR SERVICE</div>
-          <div class="proj-desc" data-i18n="proj.conteneur.desc">Plateforme e-commerce de vente et location de conteneurs maritimes avec catalogue en ligne, devis automatisé et interface d'administration complète.</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#00f5ff">
+        <div class="proj-row__index">05</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">CONTENEUR SERVICE</div>
+            <div class="proj-row__type">web app</div>
+          </div>
+          <div class="proj-row__desc" data-i18n="proj.conteneur.desc">Plateforme e-commerce de vente et location de conteneurs maritimes avec catalogue en ligne, devis automatisé et interface d'administration complète.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-a">Node.js</span>
             <span class="stag stag-a">JavaScript</span>
             <span class="stag stag-g">REST API</span>
             <span class="stag stag-c">Admin Panel</span>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">web app</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">ALINA KINGDOM</div>
-          <div class="proj-desc" data-i18n="proj.alina.desc">Agence touristique haut de gamme proposant des séjours culturels au Bénin — circuits Vodun, immersion à Cotonou, Ouidah et Abomey. Site multilingue avec réservation en ligne.</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#39ff14">
+        <div class="proj-row__index">06</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">ALINA KINGDOM</div>
+            <div class="proj-row__type">web app</div>
+          </div>
+          <div class="proj-row__desc" data-i18n="proj.alina.desc">Agence touristique haut de gamme proposant des séjours culturels au Bénin — circuits Vodun, immersion à Cotonou, Ouidah et Abomey. Site multilingue avec réservation en ligne.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-g">HTML / CSS</span>
             <span class="stag stag-a">JavaScript</span>
             <span class="stag stag-p">i18n</span>
             <span class="stag stag-c">Tourisme</span>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">web app</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">VOIRARTISAN — ANNUAIRE D'ARTISANS</div>
-          <div class="proj-desc" data-i18n="proj.voirartisan.desc">Marketplace mobile-first connectant les artisans (plombiers, électriciens, maçons...) aux clients à Cotonou. Recherche géolocalisée, paiement mobile money via FedaPay, application installable (PWA), mode sombre, FR/EN.</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#bf5af2">
+        <div class="proj-row__index">07</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">VOIRARTISAN — ANNUAIRE D'ARTISANS</div>
+            <div class="proj-row__type">web app</div>
+          </div>
+          <div class="proj-row__desc" data-i18n="proj.voirartisan.desc">Marketplace mobile-first connectant les artisans (plombiers, électriciens, maçons...) aux clients à Cotonou. Recherche géolocalisée, paiement mobile money via FedaPay, application installable (PWA), mode sombre, FR/EN.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-a">Next.js</span>
             <span class="stag stag-c">Supabase</span>
             <span class="stag stag-g">FedaPay</span>
             <span class="stag stag-p">PWA</span>
           </div>
-          <div class="proj-links">
-            <a href="https://voir-artisan.vercel.app" target="_blank" class="proj-link">
+          <div class="proj-row__links">
+            <a href="https://voir-artisan.vercel.app" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               Live
             </a>
-            <a href="https://github.com/Jordansad/VoirArtisant" target="_blank" class="proj-link">
+            <a href="https://github.com/Jordansad/VoirArtisant" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               GitHub
             </a>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">platform</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">THE HACKERHOOD — ACADÉMIE CYBERSÉCURITÉ</div>
-          <div class="proj-desc" data-i18n="proj.hackerhood.desc">Plateforme communautaire d'apprentissage en cybersécurité : roadmap 12 mois, système de progression Bronze→Legend, méthodologies Red/Blue Team, CTF, certifications, quiz et mentor IA (Gemini) pour accompagner l'équipe au quotidien.</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#ffb347">
+        <div class="proj-row__index">08</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">THE HACKERHOOD — ACADÉMIE CYBERSÉCURITÉ</div>
+            <div class="proj-row__type">platform</div>
+          </div>
+          <div class="proj-row__desc" data-i18n="proj.hackerhood.desc">Plateforme communautaire d'apprentissage en cybersécurité : roadmap 12 mois, système de progression Bronze→Legend, méthodologies Red/Blue Team, CTF, certifications, quiz et mentor IA (Gemini) pour accompagner l'équipe au quotidien.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-a">React</span>
             <span class="stag stag-c">Express</span>
             <span class="stag stag-g">Prisma/PostgreSQL</span>
             <span class="stag stag-p">Gemini AI</span>
           </div>
-          <div class="proj-links">
-            <a href="https://the-harkerhood-web.vercel.app" target="_blank" class="proj-link">
+          <div class="proj-row__links">
+            <a href="https://the-harkerhood-web.vercel.app" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               Live
             </a>
-            <a href="https://github.com/Jordansad/TheHarkerhood" target="_blank" class="proj-link">
+            <a href="https://github.com/Jordansad/TheHarkerhood" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               GitHub
             </a>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">gamification</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">RITUEL — RPG DE DISCIPLINE PERSONNELLE</div>
-          <div class="proj-desc" data-i18n="proj.rituel.desc">Application RPG de discipline personnelle (thème Solo Leveling) : quêtes quotidiennes, système de niveaux/rangs, suivi sport &amp; nutrition, comptes multi-utilisateurs avec rôle admin, PWA installable. Backend Node.js/Express + PostgreSQL (Neon).</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#00f5ff">
+        <div class="proj-row__index">09</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">RITUEL — RPG DE DISCIPLINE PERSONNELLE</div>
+            <div class="proj-row__type">gamification</div>
+          </div>
+          <div class="proj-row__desc" data-i18n="proj.rituel.desc">Application RPG de discipline personnelle (thème Solo Leveling) : quêtes quotidiennes, système de niveaux/rangs, suivi sport &amp; nutrition, comptes multi-utilisateurs avec rôle admin, PWA installable. Backend Node.js/Express + PostgreSQL (Neon).</div>
+          <div class="proj-row__tags">
             <span class="stag stag-a">Node.js</span>
             <span class="stag stag-c">PostgreSQL</span>
             <span class="stag stag-g">JWT Auth</span>
             <span class="stag stag-p">PWA</span>
           </div>
-          <div class="proj-links">
-            <a href="https://rituel-nine.vercel.app" target="_blank" class="proj-link">
+          <div class="proj-row__links">
+            <a href="https://rituel-nine.vercel.app" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               Live
             </a>
-            <a href="https://github.com/Jordansad/rituel" target="_blank" class="proj-link">
+            <a href="https://github.com/Jordansad/rituel" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               GitHub
             </a>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">finance app</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">MON BUDGET — GESTION BUDGÉTAIRE PERSO</div>
-          <div class="proj-desc" data-i18n="proj.moneco.desc">PWA de gestion budgétaire personnelle : solde, patrimoine, épargne, budgets mensuels par catégorie, fonctionnelle 100% hors-ligne. Comptes par pseudo, données stockées uniquement en local (aucun serveur).</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#39ff14">
+        <div class="proj-row__index">10</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">MON BUDGET — GESTION BUDGÉTAIRE PERSO</div>
+            <div class="proj-row__type">finance app</div>
+          </div>
+          <div class="proj-row__desc" data-i18n="proj.moneco.desc">PWA de gestion budgétaire personnelle : solde, patrimoine, épargne, budgets mensuels par catégorie, fonctionnelle 100% hors-ligne. Comptes par pseudo, données stockées uniquement en local (aucun serveur).</div>
+          <div class="proj-row__tags">
             <span class="stag stag-a">React</span>
             <span class="stag stag-c">Tailwind CSS</span>
             <span class="stag stag-p">PWA</span>
           </div>
-          <div class="proj-links">
-            <a href="https://jordansad.github.io/Mon-eco/" target="_blank" class="proj-link">
+          <div class="proj-row__links">
+            <a href="https://jordansad.github.io/Mon-eco/" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               Live
             </a>
-            <a href="https://github.com/Jordansad/Mon-eco" target="_blank" class="proj-link">
+            <a href="https://github.com/Jordansad/Mon-eco" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               GitHub
             </a>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
-      <div class="proj-card fade">
-        <div class="proj-header">
-          <div class="proj-header-dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <div class="proj-type-label">billing app</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">SONEB — GESTION FACTURES EAU &amp; ÉLECTRICITÉ</div>
-          <div class="proj-desc" data-i18n="proj.soneb.desc">Calcul et répartition automatique des factures d'eau (SONEB) et d'électricité (SBEE) entre les chambres d'une maison à plusieurs locataires, à partir du compteur général et des décompteurs individuels.</div>
-          <div class="proj-tags">
+
+      <div class="proj-row fade" style="--row-accent:#bf5af2">
+        <div class="proj-row__index">11</div>
+        <div class="proj-row__body">
+          <div class="proj-row__top">
+            <div class="proj-row__title">SONEB — GESTION FACTURES EAU &amp; ÉLECTRICITÉ</div>
+            <div class="proj-row__type">billing app</div>
+          </div>
+          <div class="proj-row__desc" data-i18n="proj.soneb.desc">Calcul et répartition automatique des factures d'eau (SONEB) et d'électricité (SBEE) entre les chambres d'une maison à plusieurs locataires, à partir du compteur général et des décompteurs individuels.</div>
+          <div class="proj-row__tags">
             <span class="stag stag-a">React</span>
             <span class="stag stag-c">TypeScript</span>
             <span class="stag stag-g">PostgreSQL</span>
             <span class="stag stag-p">JWT Auth</span>
           </div>
-          <div class="proj-links">
-            <a href="https://github.com/Jordansad/soneb/tree/claude/nouveau-projet-g1t54l" target="_blank" class="proj-link">
+          <div class="proj-row__links">
+            <a href="https://github.com/Jordansad/soneb/tree/claude/nouveau-projet-g1t54l" target="_blank" class="proj-row__link">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
               GitHub
             </a>
           </div>
         </div>
+        <div class="proj-row__visual"></div>
       </div>
     </div>
   </div>
@@ -1556,11 +1602,11 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
         </div>
         <h3 data-i18n="contact.cta.title">TRAVAILLONS ENSEMBLE</h3>
         <p data-i18n="contact.cta.desc">Je suis à la recherche d'un <strong style="color:var(--c1)">stage ou emploi en cybersécurité</strong> pour mettre en pratique mes compétences et contribuer à la sécurité des systèmes.</p>
-        <a href="mailto:sogloamour76@gmail.com" class="btn-cyber primary" style="width:100%;justify-content:center;margin-bottom:12px">
+        <a href="mailto:sogloamour76@gmail.com" class="btn-cyber primary" data-magnetic style="width:100%;justify-content:center;margin-bottom:12px">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           <span data-i18n="contact.btn1">Envoyer un email</span>
         </a>
-        <a href="cv.html" target="_blank" class="btn-cyber outline" style="width:100%;justify-content:center">
+        <a href="cv.html" target="_blank" class="btn-cyber outline" data-magnetic style="width:100%;justify-content:center">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <span data-i18n="contact.btn2">Voir mon CV</span>
         </a>
@@ -1579,7 +1625,73 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
 <script>
+/* ═══════════════════════════════════
+   LOADER
+═══════════════════════════════════ */
+(function(){
+  const loader=document.getElementById('loader');
+  const fill=document.getElementById('loaderFill');
+  const pct=document.getElementById('loaderPct');
+  let p=0;
+  const id=setInterval(()=>{
+    p=Math.min(p+Math.random()*20,100);
+    fill.style.transform=`scaleX(${p/100})`;
+    pct.textContent=Math.floor(p)+'%';
+    if(p>=100){
+      clearInterval(id);
+      setTimeout(()=>{
+        loader.style.opacity='0';
+        loader.style.pointerEvents='none';
+        setTimeout(()=>{ loader.remove(); if(window.ScrollTrigger) ScrollTrigger.refresh(); },650);
+      },150);
+    }
+  },90);
+})();
+
+/* ═══════════════════════════════════
+   CUSTOM CURSOR
+═══════════════════════════════════ */
+(function(){
+  if(window.matchMedia('(hover:none),(pointer:coarse)').matches) return;
+  const dot=document.getElementById('cursorDot');
+  const ring=document.getElementById('cursorRing');
+  let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+  window.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    dot.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`;
+  });
+  function loop(){
+    rx+=(mx-rx)*0.18; ry+=(my-ry)*0.18;
+    ring.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>ring.classList.add('is-link'));
+    el.addEventListener('mouseleave',()=>ring.classList.remove('is-link'));
+  });
+})();
+
+/* ═══════════════════════════════════
+   MAGNETIC BUTTONS
+═══════════════════════════════════ */
+(function(){
+  if(window.matchMedia('(hover:none),(pointer:coarse)').matches) return;
+  document.querySelectorAll('[data-magnetic]').forEach(el=>{
+    el.addEventListener('mousemove',e=>{
+      const r=el.getBoundingClientRect();
+      const x=e.clientX-r.left-r.width/2;
+      const y=e.clientY-r.top-r.height/2;
+      el.style.transform=`translate(${x*0.25}px, ${y*0.35}px)`;
+    });
+    el.addEventListener('mouseleave',()=>{ el.style.transform=''; });
+  });
+})();
+
 /* ═══════════════════════════════════
    PARTICLES CANVAS
 ═══════════════════════════════════ */
@@ -1643,6 +1755,20 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
 })();
 
 /* ═══════════════════════════════════
+   LENIS SMOOTH SCROLL + GSAP SYNC
+═══════════════════════════════════ */
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if(reduceMotion || !hasHover || typeof Lenis === 'undefined' || typeof gsap === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+  const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time)=>{ lenis.raf(time*1000); });
+  gsap.ticker.lagSmoothing(0);
+})();
+
+/* ═══════════════════════════════════
    HERO VIDEO — PIN, SHRINK & DEPTH
 ═══════════════════════════════════ */
 (function(){
@@ -1661,9 +1787,9 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
 
   const easeOutCubic = p => 1 - Math.pow(1 - p, 3);
 
-  let progress = 0;                       // 0..1 scroll progress through the pin
-  let targetTiltX = 0, targetTiltY = 0;   // mouse depth target (deg)
-  let tiltX = 0, tiltY = 0;               // eased current tilt
+  let progress = 0;
+  let targetTiltX = 0, targetTiltY = 0;
+  let tiltX = 0, tiltY = 0;
   let scrollTicking = false, hoverRaf = null;
 
   function computeProgress(){
@@ -1704,8 +1830,6 @@ body.light-mode .nav-links{background:rgba(240,244,255,.97)}
   window.addEventListener('resize', onScroll);
   onScroll();
 
-  // Continuous rAF loop only while the pointer is over the hero,
-  // so the mouse-depth tilt eases smoothly at 60fps without idling elsewhere.
   function hoverLoop(){ render(); hoverRaf = requestAnimationFrame(hoverLoop); }
 
   if(hasHover && !reduceMotion){
@@ -1745,12 +1869,36 @@ function type(){
 type();
 
 /* ═══════════════════════════════════
-   SCROLL ANIMATIONS
+   SCROLL REVEAL (GSAP ScrollTrigger)
 ═══════════════════════════════════ */
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
-},{threshold:.1});
-document.querySelectorAll('.fade,.fade-l,.fade-r').forEach(el=>obs.observe(el));
+(function(){
+  function fallback(){
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='none'; obs.unobserve(e.target); } });
+    },{threshold:.1});
+    document.querySelectorAll('.fade,.fade-l,.fade-r').forEach(el=>obs.observe(el));
+  }
+  if(typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined'){ fallback(); return; }
+  gsap.registerPlugin(ScrollTrigger);
+  function reveal(selector, from){
+    document.querySelectorAll(selector).forEach(el=>{
+      const animate=()=>gsap.fromTo(el, {opacity:0,...from}, {opacity:1,x:0,y:0,duration:1,ease:'power3.out'});
+      // Already in view on load (deep link, large viewport, restored scroll
+      // position) — ScrollTrigger only fires onEnter on a crossing, so a
+      // trigger never scrolled past would stay stuck at opacity:0.
+      const rect = el.getBoundingClientRect();
+      if(rect.top < window.innerHeight * 0.88){ animate(); return; }
+      ScrollTrigger.create({
+        trigger: el, start:'top 88%', once:true,
+        onEnter: animate
+      });
+    });
+  }
+  reveal('.fade', {y:28});
+  reveal('.fade-l', {x:-28});
+  reveal('.fade-r', {x:28});
+  window.addEventListener('load', ()=> ScrollTrigger.refresh());
+})();
 
 /* ═══════════════════════════════════
    SECTION BACKGROUND PARALLAX
@@ -1986,7 +2134,6 @@ function setLang(lang){
   });
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
   localStorage.setItem('lang',lang);
-  // reset typing animation with new phrases
   clearTimeout(typeTimer);
   pi=0; ci=0; del=false;
   phrases.length=0;
@@ -1995,7 +2142,6 @@ function setLang(lang){
   type();
 }
 
-// Init language on load
 if(currentLang!=='fr') setLang(currentLang);
 else document.querySelectorAll('.lang-btn[data-lang="fr"]').forEach(b=>b.classList.add('active'));
 </script>
